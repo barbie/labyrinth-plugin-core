@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Users;
 use warnings;
 use strict;
 
-my $VERSION = '5.01';
+my $VERSION = '5.02';
 
 =head1 NAME
 
@@ -97,7 +97,7 @@ sub UserLists {
     $search{where} = '';
     $search{order} = 'realname,nickname';
     $search{search} = 1;
-    $search{access} = GOD + 1;
+    $search{access} = MASTER + 1;
 
     if(Authorised(ADMIN)) {
         $search{order} = 'u.realname'   if($cgiparams{ordered});

@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use vars qw($VERSION $ALLSQL $SECTIONID);
-$VERSION = '5.01';
+$VERSION = '5.02';
 
 =head1 NAME
 
@@ -96,34 +96,34 @@ Standard actions to administer the section content.
 
 =cut
 
-sub Access  { Authorised(GOD) }
+sub Access  { Authorised(MASTER) }
 
 sub Admin {
-    return  unless AccessUser(GOD);
+    return  unless AccessUser(MASTER);
     $cgiparams{sectionid} = $SECTIONID;
     shift->SUPER::Admin();
 }
 
 sub Add {
-    return  unless AccessUser(GOD);
+    return  unless AccessUser(MASTER);
     $cgiparams{sectionid} = $SECTIONID;
     shift->SUPER::Add();
 }
 
 sub Edit {
-    return  unless AccessUser(GOD);
+    return  unless AccessUser(MASTER);
     $cgiparams{sectionid} = $SECTIONID;
     shift->SUPER::Edit();
 }
 
 sub Save {
-    return  unless AccessUser(GOD);
+    return  unless AccessUser(MASTER);
     $cgiparams{sectionid} = $SECTIONID;
     shift->SUPER::Save();
 }
 
 sub Delete {
-    return  unless AccessUser(GOD);
+    return  unless AccessUser(MASTER);
     $cgiparams{sectionid} = $SECTIONID;
     shift->SUPER::Delete();
 }

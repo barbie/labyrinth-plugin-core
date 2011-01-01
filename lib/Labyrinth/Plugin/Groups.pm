@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Groups;
 use warnings;
 use strict;
 
-my $VERSION = '5.01';
+my $VERSION = '5.02';
 
 =head1 NAME
 
@@ -128,7 +128,7 @@ sub Admin {
     if($cgiparams{doaction}) {
         Delete()    if($cgiparams{doaction} eq 'Delete');
     }
-    my @where = ($tvars{useraccess} == GOD ? () : ('groupid!=9'));
+    my @where = ($tvars{useraccess} == MASTER ? () : ('groupid!=9'));
     push @where, "groupname LIKE '%$cgiparams{'searchname'}%'"  if($cgiparams{'searchname'});
     my $where = @where ? 'WHERE '.join(' AND ',@where) : '';
     my @rows = $dbi->GetQuery('hash','AllGroups',{where=>$where});

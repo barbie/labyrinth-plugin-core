@@ -1,5 +1,8 @@
 Changes for the Labyrinth Core Plugins
 
+5.02	01/01/2011
+        - fix to check MASTER access.
+
 5.01	01/01/2011
 	- moved MasterCheck from plugins to core
 
