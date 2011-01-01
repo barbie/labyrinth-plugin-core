@@ -1,4 +1,4 @@
-H--- #YAML:1.0
+--- #YAML:1.0
 name:                     Labyrinth::Plugin::Core
 version:                  5.00
 abstract:                 Labyrinth Website Management Framework Core Plugins

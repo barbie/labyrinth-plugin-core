@@ -100,7 +100,7 @@
         "Labyrinth::Plugin::Users::Info": {
             "file": "lib/Labyrinth/Plugin/Users/Info.pm",
             "version": "5.00"
-        },
+        }
     },
     "no_index": {
         "directory": ["t","examples"]
