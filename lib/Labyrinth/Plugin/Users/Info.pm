@@ -87,7 +87,7 @@ sub Item {
 
 =item Delete
 
-=item GodCheck
+=item MasterCheck
 
 =item LoadInfo
 
@@ -97,7 +97,7 @@ sub Item {
 
 sub Edit {
     $cgiparams{userid} ||= $tvars{'loginid'};
-    return  unless GodCheck();
+    return  unless MasterCheck();
     return  unless AccessUser($LEVEL);
     return  unless AuthorCheck('GetUserInfoByID','userid',$LEVEL);
 
@@ -110,7 +110,7 @@ sub Edit {
 }
 
 sub Save {
-    return  unless GodCheck();
+    return  unless MasterCheck();
     return  unless AccessUser($LEVEL);
 
     my $newuser = $cgiparams{'userid'} ? 0 : 1;
@@ -144,8 +144,11 @@ sub Delete {
     $dbi->DoQuery('DeleteUserInfo',$cgiparams{'userid'});
 }
 
-sub GodCheck {
-    return 1    if(!$cgiparams{userid} || $cgiparams{userid} > 1 || $tvars{'loginid'} == 1);
+# Ensure only a Master user can access a Master user details
+
+sub MasterCheck {
+    return 1    if( !$cgiparams{userid} || ! Authorised(MASTER,$cgiparams{userid}) );
+    return 1    if( Authorised(MASTER,$cgiparams{userid}) && Authorised(MASTER,$tvars{'loginid'}) );
     $tvars{errcode} = 'BADACCESS';
     return 0;
 }
