@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Users::Info;
 use warnings;
 use strict;
 
-my $VERSION = '5.00';
+my $VERSION = '5.01';
 
 =head1 NAME
 
@@ -87,8 +87,6 @@ sub Item {
 
 =item Delete
 
-=item MasterCheck
-
 =item LoadInfo
 
 =back
@@ -142,15 +140,6 @@ sub Delete {
     return  unless $cgiparams{'userid'};
     return  if     $cgiparams{'userid'} == 1;   # cannot delete the master user
     $dbi->DoQuery('DeleteUserInfo',$cgiparams{'userid'});
-}
-
-# Ensure only a Master user can access a Master user details
-
-sub MasterCheck {
-    return 1    if( !$cgiparams{userid} || ! Authorised(MASTER,$cgiparams{userid}) );
-    return 1    if( Authorised(MASTER,$cgiparams{userid}) && Authorised(MASTER,$tvars{'loginid'}) );
-    $tvars{errcode} = 'BADACCESS';
-    return 0;
 }
 
 sub LoadInfo {

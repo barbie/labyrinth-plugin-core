@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Users;
 use warnings;
 use strict;
 
-my $VERSION = '5.00';
+my $VERSION = '5.01';
 
 =head1 NAME
 
@@ -293,8 +293,6 @@ sub Registered {
 
 =item ACLDelete
 
-=item GodCheck
-
 =back
 
 =cut
@@ -344,7 +342,7 @@ sub Add {
 
 sub Edit {
     $cgiparams{userid} ||= $tvars{'loginid'};
-    return  unless GodCheck();
+    return  unless MasterCheck();
     return  unless AuthorCheck('GetUserByID','userid',$LEVEL);
 
     $tvars{data}{tag}      = '[No Image]' if(!$tvars{data}{link} || $tvars{data}{link} =~ /blank.png/);
@@ -378,7 +376,7 @@ sub Edit {
 sub Save {
     my $newuser = $cgiparams{'userid'} ? 0 : 1;
     unless($newuser) {
-        return  unless GodCheck();
+        return  unless MasterCheck();
         if($cgiparams{userid} != $tvars{'loginid'} && !Authorised($LEVEL)) {
             $tvars{errcode} = 'BADACCESS';
             return;
@@ -429,7 +427,7 @@ sub Save {
 
 sub AdminSave {
     return  unless AccessUser(ADMIN);
-    return  unless GodCheck();
+    return  unless MasterCheck();
 
     my $newuser = $cgiparams{'userid'} ? 0 : 1;
     return  unless AuthorCheck('GetUserByID','userid',$LEVEL);
@@ -537,14 +535,6 @@ sub ACLDelete {
             $cgiparams{'folderid'});
 
     $tvars{thanks} = 'User access removed successfully.';
-}
-
-# Ensure only the God user can access the God user details
-
-sub GodCheck {
-    return 1    if(!$cgiparams{userid} || $cgiparams{userid} > 1 || $tvars{'loginid'} == 1);
-    $tvars{errcode} = 'BADACCESS';
-    return 0;
 }
 
 1;
