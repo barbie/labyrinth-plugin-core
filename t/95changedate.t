@@ -6,7 +6,13 @@ use Labyrinth::Plugin::Core;
 plan skip_all => "Author tests not required for installation"
     unless ( $ENV{AUTOMATED_TESTING} );
 
-my $fh = IO::File->new('CHANGES','r')   or plan skip_all => "Cannot open Changes file";
+my $changes;
+$changes = 'Changes' if(-f 'Changes');
+$changes = 'CHANGES' if(-f 'CHANGES');
+
+plan skip_all => 'No Changes file found'    unless($changes);
+
+my $fh = IO::File->new($changes,'r')   or plan skip_all => "Cannot open $changes file";
 
 plan no_plan;
 
