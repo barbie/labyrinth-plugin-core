@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Hits;
 use warnings;
 use strict;
 
-my $VERSION = '5.02';
+my $VERSION = '5.03';
 
 =head1 NAME
 
@@ -36,6 +36,7 @@ use Labyrinth::Plugin::Content;
 my %fields = (
     title       => { type => 1, html => 1 },
     tagline     => { type => 0, html => 1 },
+    query       => { type => 0, html => 2 },
 );
 
 my $WEEKS1 = 60 * 60 * 24 * 7;

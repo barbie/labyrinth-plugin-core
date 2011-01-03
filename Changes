@@ -1,5 +1,10 @@
 Changes for the Labyrinth Core Plugins
 
+5.03	03/01/2011
+	- query added list of fields to be cleaned before displaying.
+	- update from live for saving menu options.
+	- update from live for saving user details.
+
 5.02	01/01/2011
         - fix to check MASTER access.
 

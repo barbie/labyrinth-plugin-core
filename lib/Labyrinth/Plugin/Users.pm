@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Users;
 use warnings;
 use strict;
 
-my $VERSION = '5.02';
+my $VERSION = '5.03';
 
 =head1 NAME
 
@@ -53,6 +53,7 @@ my %fields = (
     nickname    => { type => 0, html => 1 },
     realname    => { type => 1, html => 1 },
     aboutme     => { type => 0, html => 2 },
+    search      => { type => 0, html => 0 },
     image       => { type => 0, html => 0 },
     accessid    => { type => 0, html => 0 },
     realmid     => { type => 0, html => 0 },
@@ -287,13 +288,9 @@ sub Registered {
 
 =item Ban
 
-=item ACL
+=item AdminPass
 
-=item ACLSave
-
-=item ACLDelete
-
-=back
+=item AdminChng
 
 =cut
 
@@ -314,7 +311,8 @@ sub ImageCheck  {
 sub Admin {
     return  unless AccessUser($LEVEL);
 
-    if(my $ids = join(",",grep {$_ > 1} CGIArray('LISTED'))) {
+    # note: cannot alter the guest & master users
+    if(my $ids = join(",",grep {$_ > 2} CGIArray('LISTED'))) {
         $dbi->DoQuery('SetUserSearch',{ids=>$ids},1)    if($cgiparams{doaction} eq 'Show');
         $dbi->DoQuery('SetUserSearch',{ids=>$ids},0)    if($cgiparams{doaction} eq 'Hide');
         Ban($ids)                                       if($cgiparams{doaction} eq 'Ban');
@@ -404,8 +402,7 @@ sub Save {
         )   if($cgiparams{image});
 
     my @fields = (  $tvars{data}{'nickname'}, $tvars{data}{'realname'},
-                    $tvars{data}{'email'},    $imageid,
-                    $tvars{data}{'aboutme'}
+                    $tvars{data}{'email'},    $imageid
     );
 
     if($newuser) {
@@ -458,9 +455,9 @@ sub AdminSave {
     $tvars{data}->{'realm'}    = Authorised(ADMIN) && $tvars{data}->{'realmid'} ? RealmName($tvars{data}->{realmid}) : $realm;
 
     my @fields = (  $tvars{data}{'accessid'}, $tvars{data}{'search'},
+                    $tvars{data}{'realm'},    
                     $tvars{data}{'nickname'}, $tvars{data}{'realname'},
-                    $tvars{data}{'realm'},    $tvars{data}{'email'},
-                    $imageid,                 $tvars{data}{'aboutme'}
+                    $tvars{data}{'email'},    $imageid
     );
 
     if($newuser) {
@@ -474,18 +471,82 @@ sub AdminSave {
 }
 
 sub Delete {
+    my $ids = shift;
     return  unless AccessUser($LEVEL);
-    return  unless $cgiparams{'userid'};
-    return  if     $cgiparams{'userid'} == 1;   # cannot delete the master user
-    $dbi->DoQuery('BanUser','-deleted-',$cgiparams{'userid'});
+    $dbi->DoQuery('DeleteUsers',{ids => $ids});
+    $tvars{thanks} = 'Users Deleted.';
 }
 
 sub Ban {
+    my $ids = shift;
     return  unless AccessUser($LEVEL);
-    return  unless $cgiparams{'userid'};
-    $dbi->DoQuery('BanUser','-banned-',$cgiparams{'userid'});
-    $tvars{thanks} = 'User Banned.';
+    $dbi->DoQuery('BanUsers',{ids => $ids},'-banned-');
+    $tvars{thanks} = 'Users Banned.';
 }
+
+sub AdminPass {
+    return  unless($cgiparams{'userid'});
+    return  unless MasterCheck();
+    return  unless AccessUser($LEVEL);
+    return  unless AuthorCheck('GetUserByID','userid',$LEVEL);
+    $tvars{data}{name}     = UserName($cgiparams{'userid'});
+}
+
+sub AdminChng {
+    return  unless($cgiparams{'userid'});
+    return  unless MasterCheck();
+    return  unless AccessUser($LEVEL);
+
+    my @mandatory = qw(userid effect2 effect3);
+    if(FieldCheck(\@mandatory,\@mandatory)) {
+        $tvars{errmess} = 'All fields must be complete, please try again.';
+        $tvars{errcode} = 'ERROR';
+        return;
+    }
+
+    $tvars{data}{name}     = UserName($cgiparams{'userid'});
+
+    if($cgiparams{effect2} ne $cgiparams{effect3}) {
+        $tvars{errmess} = 'New &amp; verify passwords don\'t match, please try again.';
+        $tvars{errcode} = 'ERROR';
+        return;
+    }
+
+    my %passerrors = (
+        1 => "Password too short, length should be $settings{minpasslen}-$settings{maxpasslen} characters.",
+        2 => "Password too long, length should be $settings{minpasslen}-$settings{maxpasslen} characters.",
+        3 => 'Password not cyptic enough, please enter as per password rules.',
+        4 => 'Password contains spaces or tabs.',
+        5 => 'Password should contain 3 or more unique characters.',
+    );
+
+    my $invalid = PasswordCheck($cgiparams{effect2});
+    if($invalid) {
+        $tvars{errmess} = $passerrors{$invalid};
+        $tvars{errcode} = 'ERROR';
+        return;
+    }
+
+    $dbi->DoQuery('ChangePassword',$cgiparams{effect2},$cgiparams{'userid'});
+    $tvars{thanks} = 'Password Changed.';
+
+    if($cgiparams{mailuser}) {
+        my @rows = $dbi->GetQuery('hash','GetUserByID',$cgiparams{'userid'});
+        MailSend(   template    => 'mailer/reset.eml',
+                    name        => $rows[0]->{realname},
+                    password    => $cgiparams{effect2},
+                    email       => $rows[0]->{email}
+        );
+    }
+}
+
+=item ACL
+
+=item ACLSave
+
+=item ACLDelete
+
+=cut
 
 sub ACL {
     return  unless AccessUser($LEVEL);
@@ -540,6 +601,8 @@ sub ACLDelete {
 1;
 
 __END__
+
+=back
 
 =head1 SEE ALSO
 

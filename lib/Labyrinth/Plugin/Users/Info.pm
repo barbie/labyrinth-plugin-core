@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Users::Info;
 use warnings;
 use strict;
 
-my $VERSION = '5.02';
+my $VERSION = '5.03';
 
 =head1 NAME
 
@@ -130,16 +130,7 @@ sub Save {
     return  if FieldCheck(\@allfields,\@mandatory);
 
     my @fields = ((map {$tvars{data}->{$_}} @fieldorder), $tvars{data}->{'userid'});
-
-    if($newuser)    {$dbi->IDQuery('NewUserInfo', @fields);}
-    else            {$dbi->DoQuery('SaveUserInfo',@fields);}
-}
-
-sub Delete {
-    return  unless AccessUser($LEVEL);
-    return  unless $cgiparams{'userid'};
-    return  if     $cgiparams{'userid'} == 1;   # cannot delete the master user
-    $dbi->DoQuery('DeleteUserInfo',$cgiparams{'userid'});
+    $dbi->DoQuery('SaveUserInfo',@fields);
 }
 
 sub LoadInfo {

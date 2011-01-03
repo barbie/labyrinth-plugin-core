@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Menus;
 use warnings;
 use strict;
 
-my $VERSION = '5.02';
+my $VERSION = '5.03';
 
 =head1 NAME
 
@@ -36,6 +36,7 @@ use Labyrinth::Variables;
 
 my %fields = (
     menuid      => { type => 0, html => 0 },
+    name        => { type => 1, html => 1 },
     realmid     => { type => 1, html => 0 },
     typeid      => { type => 1, html => 0 },
     title       => { type => 0, html => 1 },
@@ -48,8 +49,7 @@ for(keys %fields) {
     push @allfields, $_;
 }
 
-my @savefields  = qw(title typeid realmid parentid);
-my @addfields   = qw(title typeid realmid parentid);
+my @savefields  = qw(name title typeid realmid parentid);
 my $INDEXKEY    = 'menuid';
 my $ALLSQL      = 'AllMenus';
 my $SAVESQL     = 'SaveMenu';
@@ -342,12 +342,10 @@ sub Save {
 
     return  if FieldCheck(\@allfields,\@mandatory);
 
-    my @fields;
+    my @fields = map {$tvars{data}->{$_}} @savefields;
     if($cgiparams{$INDEXKEY}) {
-        push @fields, $tvars{data}->{$_}    for(@savefields);
         $dbi->DoQuery($SAVESQL,@fields,$cgiparams{$INDEXKEY});
     } else {
-        push @fields, $tvars{data}->{$_}    for(@addfields);
         $cgiparams{$INDEXKEY} = $dbi->IDQuery($ADDSQL,@fields);
     }
 

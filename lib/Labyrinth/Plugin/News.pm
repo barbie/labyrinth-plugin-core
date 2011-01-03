@@ -3,7 +3,7 @@ package Labyrinth::Plugin::News;
 use warnings;
 use strict;
 
-my $VERSION = '5.02';
+my $VERSION = '5.03';
 
 =head1 NAME
 
