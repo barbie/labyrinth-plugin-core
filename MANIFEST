@@ -5,6 +5,7 @@ META.json
 META.yml
 lib/Labyrinth/Plugin/Articles.pm
 lib/Labyrinth/Plugin/Articles/Sections.pm
+lib/Labyrinth/Plugin/Articles/Site.pm
 lib/Labyrinth/Plugin/Content.pm
 lib/Labyrinth/Plugin/Core.pm
 lib/Labyrinth/Plugin/Folders.pm

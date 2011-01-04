@@ -1,5 +1,8 @@
 Changes for the Labyrinth Core Plugins
 
+5.04	04/01/2011
+	- added Articles::Site from Labyrinth-Demo.
+
 5.03	03/01/2011
 	- query added list of fields to be cleaned before displaying.
 	- update from live for saving menu options.

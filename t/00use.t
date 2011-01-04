@@ -1,11 +1,12 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 BEGIN {
     use_ok('Labyrinth::Plugin::Articles');
     use_ok('Labyrinth::Plugin::Articles::Sections');
+    use_ok('Labyrinth::Plugin::Articles::Site');
     use_ok('Labyrinth::Plugin::Content');
     use_ok('Labyrinth::Plugin::Core');
     use_ok('Labyrinth::Plugin::Folders');

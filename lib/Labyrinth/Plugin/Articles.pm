@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Articles;
 use warnings;
 use strict;
 
-my $VERSION = '5.03';
+my $VERSION = '5.04';
 
 =head1 NAME
 
@@ -95,20 +95,20 @@ my $SECTIONID   = 1;
 
 It is recommended that the following be used to differentiate the types of
 sections, for which articles are used to provide the underlying structure.
+If you wish to add your own plugins, it is recommended that you use a Section
+ID that is greater than 99 to avoid clashing with any potential standard
+plugins.
 
   1 = page article, traditional articles
   2 = section entries, for sites that require intro text for each section
-      (see Section.pm)
+      (see Articles::Section)
   3 = site content, such as 'About' or 'Home' fixed layout content
-      (see Content.pm)
-  4 = products (see Products.pm)
-  5 = profiles (see Profiles.pm)
-  6 = diary (see Diary.pm)
-  7 = lyrics (see Lyrics.pm)
-  8 = discographies (see Discography.pm)
-  9 = Tips
- 10 = Presentations
- 11 = Screencasts
+      (see Articles::Site)
+  4 = products (see Articles::Products)
+  5 = profiles (see Articles::Profiles)
+  6 = diary (see Articles::Diary)
+  7 = lyrics (see Articles::Lyrics)
+  8 = discographies (see Articles::Discography)
 
 # -------------------------------------
 # The Subs

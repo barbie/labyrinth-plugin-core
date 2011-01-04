@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Folders;
 use warnings;
 use strict;
 
-my $VERSION = '5.03';
+my $VERSION = '5.04';
 
 =head1 NAME
 
