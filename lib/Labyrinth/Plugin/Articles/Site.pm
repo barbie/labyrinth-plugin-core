@@ -60,6 +60,22 @@ my $SECTIONID = 3;
 
 =head1 PUBLIC INTERFACE METHODS
 
+=over 4
+
+=item Archive
+
+=item List
+
+=item Meta
+
+=item Cloud
+
+=item Search
+
+=item Item
+
+=back
+
 =cut
 
 sub Archive {
@@ -108,7 +124,23 @@ sub Item {
 
 =head1 ADMIN INTERFACE METHODS
 
+Standard actions to administer the section content.
+
 =over 4
+
+=item Access
+
+=item Admin
+
+=item Add
+
+=item Edit
+
+=item Save
+
+=item Delete
+
+=back
 
 =cut
 
@@ -153,12 +185,9 @@ sub Delete {
 
 __END__
 
-=back
-
 =head1 SEE ALSO
 
-L<Labyrinth>,
-L<Labyrinth::Plugins::Core>
+L<Labyrinth>
 
 =head1 AUTHOR
 
@@ -167,7 +196,7 @@ Miss Barbell Productions, L<http://www.missbarbell.co.uk/>
 
 =head1 COPYRIGHT & LICENSE
 
-  Copyright (C) 2011 Barbie for Miss Barbell Productions
+  Copyright (C) 2002-2011 Barbie for Miss Barbell Productions
   All Rights Reserved.
 
   This module is free software; you can redistribute it and/or
