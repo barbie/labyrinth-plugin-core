@@ -176,16 +176,18 @@ sub Archive {
 sub List {
     my (@mainarts,@inbrief,@archive);
     $cgiparams{name} = undef;
-    my $limit = "LIMIT $settings{limit}"    if($settings{limit});
-    my $stop  = $settings{'mainpage'} || MAINPAGE;
+
+    my $limit = "LIMIT $settings{data}{article_limit}"  if($settings{data}{article_limit});
+    my $stop  = $settings{data}{article_stop} || MAINPAGE;
+    
     my $sectionid = $cgiparams{sectionid} || $SECTIONID;
     my @where = ("sectionid=$sectionid","publish=3");
     push @where, $settings{where}  if($settings{where});
     my $where = 'WHERE ' . join(' AND ',@where);
+    my $order = 'ORDER BY ' . ($settings{data}{order} || 'createdate DESC');
 
-    my @rows = sort {int($b->{createdate}) <=> int($a->{createdate})}
-                $dbi->GetQuery('hash',$ALLSQL,{where=>$where,limit=>$limit});
-    foreach my $row (@rows) {
+    my @rows = $dbi->GetQuery('hash',$ALLSQL,{where=>$where,limit=>$limit,order=>$order});
+    for my $row (@rows) {
         if($stop) {
             $cgiparams{articleid} = $row->{articleid};
             Item();
@@ -198,9 +200,8 @@ sub List {
     # archived articles
     @where = ("sectionid=$sectionid","publish=4");
     $where = 'WHERE ' . join(' AND ',@where);
-    @rows = sort {int($b->{createdate}) <=> int($a->{createdate})}
-                $dbi->GetQuery('hash',$ALLSQL,{where=>$where,limit=>$limit});
-    foreach my $row (@rows) {
+    @rows = $dbi->GetQuery('hash',$ALLSQL,{where=>$where,limit=>$limit,order=>$order});
+    for my $row (@rows) {
         push @archive, {name => $row->{quickname}, title => $row->{title}, snippet => _snippet($row,82)};
     }
     $tvars{mainarts} = \@mainarts   if(@mainarts);

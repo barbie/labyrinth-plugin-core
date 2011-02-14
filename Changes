@@ -1,5 +1,8 @@
 Changes for the Labyrinth Core Plugins
 
+5.05	current
+	- update Articles to better support limit, stop and order from plugins.
+
 5.04	04/01/2011
 	- added Articles::Site from Labyrinth-Demo.
 

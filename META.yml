@@ -10,15 +10,15 @@ distribution_type:        module
 installdirs:              site
 
 requires:
-  Labyrinth:	            5.01,
-  Clone:		              0,
-  Time::Local:		        0,
-  Image::Size:		        0,
-  File::Copy:		          0,
-  File::Basename:		      0,
-  Digest::MD5:		        0,
-  URI::Escape:		        0,
-  Config::IniFiles:		    0,
+  Labyrinth:	            5.01
+  Clone:		              0
+  Time::Local:		        0
+  Image::Size:		        0
+  File::Copy:		          0
+  File::Basename:		      0
+  Digest::MD5:		        0
+  URI::Escape:		        0
+  Config::IniFiles:		    0
 recommends:
   Test::More:             0.70
   Test::Pod:              1.00

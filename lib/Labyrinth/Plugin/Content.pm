@@ -1,7 +1,7 @@
 package Labyrinth::Plugin::Content;
 
-use warnings;
 use strict;
+use warnings;
 
 my $VERSION = '5.04';
 

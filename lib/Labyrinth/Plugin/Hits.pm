@@ -1,7 +1,7 @@
 package Labyrinth::Plugin::Hits;
 
-use warnings;
 use strict;
+use warnings;
 
 my $VERSION = '5.04';
 
@@ -126,7 +126,7 @@ sub HitPages {
     $tvars{ddmonths} = MonthSelect($tvars{data}->{month},1);
     $tvars{ddyears}  = YearSelect($tvars{data}->{year},2,1);
     $tvars{today}    = formatDate(7);
-    $tvars{pagesmon}  = \@pagesmon  if(@pagesmon);
+    $tvars{pagesmon} = \@pagesmon  if(@pagesmon);
 }
 
 sub HitAlbums {
