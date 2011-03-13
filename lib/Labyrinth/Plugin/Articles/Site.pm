@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Articles::Site;
 use warnings;
 use strict;
 
-my $VERSION = '5.05';
+my $VERSION = '5.06';
 
 =head1 NAME
 
@@ -11,7 +11,8 @@ Labyrinth::Plugin::Articles::Site - Site Pages handler plugin for Labyrinth
 
 =head1 DESCRIPTION
 
-Contains all the site pages handling functionality
+Contains all the site pages handling functionality for the Labyrinth
+framework.
 
 =cut
 
@@ -200,6 +201,6 @@ Miss Barbell Productions, L<http://www.missbarbell.co.uk/>
   All Rights Reserved.
 
   This module is free software; you can redistribute it and/or
-  modify it under the same terms as Perl itself.
+  modify it under the Artistic License 2.0.
 
 =cut

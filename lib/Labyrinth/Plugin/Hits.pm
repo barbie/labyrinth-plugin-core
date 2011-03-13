@@ -3,11 +3,16 @@ package Labyrinth::Plugin::Hits;
 use strict;
 use warnings;
 
-my $VERSION = '5.05';
+my $VERSION = '5.06';
 
 =head1 NAME
 
 Labyrinth::Plugin::Hits - Handles the hit and update stats for page impressions
+
+=head1 DESCRIPTION
+
+Contains all the page hit handling functionality for the Labyrinth
+framework.
 
 =cut
 
@@ -268,7 +273,7 @@ __END__
 
 =head1 SEE ALSO
 
-  Labyrinth
+L<Labyrinth>
 
 =head1 AUTHOR
 
@@ -281,6 +286,6 @@ Miss Barbell Productions, L<http://www.missbarbell.co.uk/>
   All Rights Reserved.
 
   This module is free software; you can redistribute it and/or
-  modify it under the same terms as Perl itself.
+  modify it under the Artistic License 2.0.
 
 =cut

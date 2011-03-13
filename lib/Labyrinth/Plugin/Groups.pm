@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Groups;
 use warnings;
 use strict;
 
-my $VERSION = '5.05';
+my $VERSION = '5.06';
 
 =head1 NAME
 
@@ -11,12 +11,13 @@ Labyrinth::Plugin::Groups - handler for Labyrinth groups
 
 =head1 DESCRIPTION
 
-Contains all the groups handling functionality
-
-  type 1 - userid link to groupid
-  type 2 - groupid link to groupid
+Contains all the group handling functionality for the Labyrinth
+framework.
 
 =cut
+
+#   type 1 - userid link to groupid
+#   type 2 - groupid link to groupid
 
 # -------------------------------------
 # Library Modules
@@ -56,7 +57,11 @@ for(keys %fields) {
 
 =item GetUserGroup()
 
+For the current user login, set main group.
+
 =item UserGroups()
+
+For the current user login, return the list of groups they are associated with.
 
 =back
 
@@ -99,25 +104,47 @@ sub UserGroups {
 
 =item Admin
 
+Provides List and Delete functionality for Group Admin.
+
 =item Add
+
+Creates a new group.
 
 =item AddLinkUser
 
+Links a given user to the given group.
+
 =item AddLinkGroup
 
-=item User
+Links a given group to another, the latter becoming the parent of the former.
 
 =item Edit
 
+Provides group admin functionality for a given group.
+
 =item Save
+
+Saves the current settings for the given group.
+
+=item User
+
+Provides group admin functionality for a given user.
 
 =item UserSave
 
+Saves the current group settings for the given user.
+
 =item Delete
+
+Deletes a group. Called from within the Admin method above.
 
 =item DeleteLinkUser
 
+Removes the given user from the given group.
+
 =item DeleteLinkGroup
+
+Removes the given group from a nominated parent.
 
 =back
 
@@ -282,7 +309,7 @@ __END__
 
 =head1 SEE ALSO
 
-  Labyrinth
+L<Labyrinth>
 
 =head1 AUTHOR
 
@@ -295,6 +322,6 @@ Miss Barbell Productions, L<http://www.missbarbell.co.uk/>
   All Rights Reserved.
 
   This module is free software; you can redistribute it and/or
-  modify it under the same terms as Perl itself.
+  modify it under the Artistic License 2.0.
 
 =cut

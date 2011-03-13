@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Articles;
 use warnings;
 use strict;
 
-my $VERSION = '5.05';
+my $VERSION = '5.06';
 
 =head1 NAME
 
@@ -11,7 +11,8 @@ Labyrinth::Plugin::Articles - Plugin Articles handler for Labyrinth
 
 =head1 DESCRIPTION
 
-Contains all the article handling functionality
+Contains all the default article handling functionality for the Labyrinth
+framework.
 
 =cut
 
@@ -91,7 +92,14 @@ my $LEVEL2      = ADMIN;
 # however, the default is also a standard article.
 my $SECTIONID   = 1;
 
-=head1 SECTION IDs
+=head1 CONFIGURATION
+
+The Articles package is meant to be used as a base package providing default
+configuration and functionality for article based content. It is expected that
+that a plugin will use this package as a base, and override configuration and
+methods as required.
+
+=head2 Section IDs
 
 It is recommended that the following be used to differentiate the types of
 sections, for which articles are used to provide the underlying structure.
@@ -110,6 +118,28 @@ plugins.
   7 = lyrics (see Articles::Lyrics)
   8 = discographies (see Articles::Discography)
 
+Note that some plugins mentioned above may not be currently available, however
+all are planned for release.
+
+=head2 SQL Phrases
+
+Several keys used to access SQL phrases can be overriden. These default keys
+are used in the event that only basic configuration overrides are needed, such
+as the Section ID.
+
+Key variables available are:
+
+  our $INDEXKEY   = 'articleid';
+  our $ALLSQL     = 'AllArticles';
+  our $SAVESQL    = 'SaveArticle';
+  our $ADDSQL     = 'AddArticle';
+  our $GETSQL     = 'GetArticleByID';
+  our $DELETESQL  = 'DeleteRecords';
+  our $PROMOTESQL = 'PromoteArticle';
+  our $LEVEL      = EDITOR;
+
+=cut
+
 # -------------------------------------
 # The Subs
 
@@ -117,35 +147,35 @@ plugins.
 
 =over 4
 
-=item LatestArticles()
+=item LatestArticles
 
 Gets a list of the latest article titles
 
-=item Archive()
+=item Archive
 
 Gets a list of the volumes available.
 
-=item List()
+=item List
 
 Gets a list of articles.
 
-=item Meta()
+=item Meta
 
 Gets a list of articles based on given meta tags.
 
-=item Search()
+=item Search
 
 Gets a list of articles based on a given search string.
 
-=item Cloud()
+=item Cloud
 
 Gets current tag cloud.
 
-=item Tags()
+=item Tags
 
 Gets the current list of meta tags
 
-=item Item()
+=item Item
 
 Gets a single article.
 
@@ -337,19 +367,38 @@ sub Item {
 
 =item Admin
 
+Lists the current set of articles for the given section.
+
+Also provides the delete, copy and promote functionality from the main
+administration page for the given section.
+
 =item Add
+
+Add an article to the current section.
 
 =item Edit
 
+Edit an article within the current section.
+
 =item AddParagraph
+
+Add a text block to the current article.
 
 =item AddImage
 
+Add an image block to the current article.
+
 =item AddLink
+
+Add a link block to the current article.
 
 =item DeleteItem
 
+Delete an article.
+
 =item Relocate
+
+Relocate an article in a list, where an order is in use.
 
 =item LoadContent
 
@@ -902,7 +951,7 @@ __END__
 
 =head1 SEE ALSO
 
-  Labyrinth
+L<Labyrinth>
 
 =head1 AUTHOR
 
@@ -915,6 +964,6 @@ Miss Barbell Productions, L<http://www.missbarbell.co.uk/>
   All Rights Reserved.
 
   This module is free software; you can redistribute it and/or
-  modify it under the same terms as Perl itself.
+  modify it under the Artistic License 2.0.
 
 =cut

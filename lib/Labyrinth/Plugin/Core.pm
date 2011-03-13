@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Core;
 use warnings;
 use strict;
 
-our $VERSION = '5.05';
+our $VERSION = '5.06';
 
 1;
 
@@ -34,7 +34,7 @@ Labyrinth and any installed plugins to work correctly. These files consist of
 SQL, HTML template and configuration files, together with some basic CSS and 
 Javascript files.
 
-Please see the Labyrinth-Demo package for a set of these files.
+Please see the L<Labyrinth::Demo> distribution for a set of these files.
 
 However, these files are only the beginning, and to implement your website,
 you will need to update the appropriate files to use your layout design.
@@ -54,9 +54,11 @@ use and extend Labyrinth as you wish.
 
 =head1 SEE ALSO
 
-L<Labyrinth>
+L<Labyrinth>, 
+L<Labyrinth::Demo>
 
-http://labyrinth.missbarbell.co.uk
+L<http://labyrinth.missbarbell.co.uk>,
+L<http://demo.missbarbell.co.uk>
 
 =head1 AUTHOR
 
@@ -69,6 +71,6 @@ Miss Barbell Productions, L<http://www.missbarbell.co.uk/>
   All Rights Reserved.
 
   This module is free software; you can redistribute it and/or
-  modify it under the same terms as Perl itself.
+  modify it under the Artistic License 2.0.
 
 =cut
