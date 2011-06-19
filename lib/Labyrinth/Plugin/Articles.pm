@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Articles;
 use warnings;
 use strict;
 
-my $VERSION = '5.07';
+my $VERSION = '5.08';
 
 =head1 NAME
 
@@ -324,25 +324,7 @@ sub Item {
             ($body->{tag},$body->{width},$body->{height}) = split(qr/\|/,$body->{body})
                 if($body->{body});
 
-            unless(defined $body->{width} || defined $body->{height}) {
-                ($body->{width},$body->{height}) = split('x',$rows[0]->{dimensions})
-                    if($rows[0]->{dimensions});
-            }
-
-            # long winded to avoid uninitialised variable errors
-            if(defined $body->{width} && defined $body->{height} && $body->{width} > $body->{height} && $body->{width} > 400) {
-                $body->{width} = 400;
-                delete $body->{height};
-            } elsif(defined $body->{width} && defined $body->{height} && $body->{width} < $body->{height} && $body->{height} > 400) {
-                $body->{height} = 400;
-                delete $body->{width};
-            } elsif(defined $body->{width} && $body->{width} > 400) {
-                $body->{width} = 400;
-                delete $body->{height};
-            } elsif(defined $body->{height} && $body->{height} > 400) {
-                $body->{height} = 400;
-                delete $body->{width};
-            }
+            ($body->{width},$body->{height}) = GetImageSize($body->{link},$rows[0]->{dimensions},$body->{width},$body->{height},MaxArticleWidth,MaxArticleHeight);
 
             #LogDebug(sprintf "%d/%s [%d x %d]", ($body->{imageid}||0),($body->{link}||'-'),($body->{width}||0),($body->{height}||0));
         }
@@ -534,13 +516,7 @@ sub Edit {
             $body->{ddalign} = AlignSelect($body->{align},$orderno);
             $body->{align}   = Alignment($body->{align});
 
-            unless(defined $body->{width} || defined $body->{height}) {
-                ($body->{width},$body->{height}) = split('x',$rows[0]->{dimensions});
-            }
-            if($body->{width} > 400) {
-                $body->{width} = 400;
-                delete $body->{height};
-            }
+            ($body->{width},$body->{height}) = GetImageSize($body->{link},$rows[0]->{dimensions},$body->{width},$body->{height},MaxArticleWidth,MaxArticleHeight);
 
             LogDebug("$body->{imageid}/$body->{link} [$body->{width} x $body->{height}]");
         }

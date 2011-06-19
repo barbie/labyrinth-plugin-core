@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Users;
 use warnings;
 use strict;
 
-my $VERSION = '5.07';
+my $VERSION = '5.08';
 
 =head1 NAME
 
@@ -135,6 +135,7 @@ sub UserLists {
 
     for(@rows) {
         ($_->{width},$_->{height}) = GetImageSize($_->{link},$_->{dimensions},$_->{width},$_->{height},MaxUserWidth,MaxUserHeight);
+        $_->{gravatar} = GetGravatar($_->{userid},$_->{email});
 
         if($_->{url} && $_->{url} !~ /^https?:/) {
             $_->{url} = 'http://' . $_->{url};
@@ -153,8 +154,6 @@ sub UserLists {
         } else {
             $_->{name} = $_->{nickname} || $_->{realname};
         }
-
-        $_->{gravatar} = GetGravatar($_->{userid},$_->{email});
     }
 
     $tvars{users}    = \@rows       if(@rows);
@@ -182,10 +181,12 @@ sub Item {
     my @rows = $dbi->GetQuery('hash','GetUserByID',$cgiparams{'userid'});
     return  unless(@rows);
 
+    $rows[0]->{tag}  = ''   if($rows[0]->{link} =~ /blank.png/);
+    $rows[0]->{link} = ''   if($rows[0]->{link} =~ /blank.png/);
+
+    ($rows[0]->{width},$rows[0]->{height}) = GetImageSize($rows[0]->{link},$rows[0]->{dimensions},$rows[0]->{width},$rows[0]->{height},MaxUserWidth,MaxUserHeight);
     $rows[0]->{gravatar} = GetGravatar($rows[0]->{userid},$rows[0]->{email});
 
-    $rows[0]->{tag} = ''    if($rows[0]->{link} =~ /blank.png/);
-#   $rows[0]->{tag} = '[No Image]'  if($rows[0]->{link} =~ /blank.png/);
     $tvars{data} = $rows[0];
 }
 

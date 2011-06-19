@@ -4,7 +4,7 @@ WriteMakefile(
     NAME            => 'Labyrinth::Plugin::Core',
     VERSION_FROM    => 'lib/Labyrinth/Plugin/Core.pm',
     PREREQ_PM       => {
-        'Labyrinth'         => '5.07',
+        'Labyrinth'         => '5.08',
 
         'Clone'             => 0,
         'Time::Local'       => 0,

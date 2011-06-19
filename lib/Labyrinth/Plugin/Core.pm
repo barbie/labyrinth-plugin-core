@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Core;
 use warnings;
 use strict;
 
-our $VERSION = '5.07';
+our $VERSION = '5.08';
 
 1;
 
