@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use vars qw($VERSION $ALLSQL $SECTIONID);
-$VERSION = '5.06';
+$VERSION = '5.07';
 
 =head1 NAME
 
@@ -62,15 +62,27 @@ $SECTIONID  = 2;
 
 =item GetSection
 
+Retrieves the section articles used for introductory passages. 
+
+GetSection can be called with a named section, or it will use the section
+of the current request. 
+
 =back
 
 =cut
 
 sub GetSection {
+    my ($self, $section) = @_;
     my $name = $cgiparams{name};
-    my $request = $cgiparams{act} || 'home-public';
-    ($cgiparams{name}) = split("-",$request);
-    shift->SUPER::Item();
+
+    if($section) {
+        $cgiparams{name} = $section;
+    } else {
+        my $request = $cgiparams{act} || 'home-public';
+        ($cgiparams{name}) = split("-",$request);
+    }
+
+    $self->SUPER::Item();
     $tvars{page}->{section} = $tvars{articles}->{$cgiparams{name}}  if($tvars{articles}->{$cgiparams{name}});
     $cgiparams{name} = $name;   # revert back to what it should be!
 }
@@ -83,15 +95,27 @@ Standard actions to administer the section content.
 
 =item Access
 
+Determine with user has access to administration features.
+
 =item Admin
+
+Provide list of the sections currently available.
 
 =item Add
 
+Add a new section article.
+
 =item Edit
+
+Edit an existing section article.
 
 =item Save
 
+Save the current section article.
+
 =item Delete
+
+Delete a section article.
 
 =back
 

@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Articles::Site;
 use warnings;
 use strict;
 
-my $VERSION = '5.06';
+my $VERSION = '5.07';
 
 =head1 NAME
 
@@ -65,15 +65,27 @@ my $SECTIONID = 3;
 
 =item Archive
 
+Retrieves a list of the volumes available.
+
 =item List
+
+Retrieves a list of site pages.
 
 =item Meta
 
+Retrieves pages based on given meta tag.
+
 =item Cloud
+
+Provides a tag cloud for the current site pages.
 
 =item Search
 
+Retrieves a list of site pages based on a given search string.
+
 =item Item
+
+Provides the content of a named site page.
 
 =back
 
@@ -131,15 +143,27 @@ Standard actions to administer the section content.
 
 =item Access
 
+Determine with user has access to administration features.
+
 =item Admin
+
+Provide list of the site pages currently available.
 
 =item Add
 
+Add a new site page.
+
 =item Edit
+
+Edit an existing site page.
 
 =item Save
 
+Save the current site page.
+
 =item Delete
+
+Delete a site page.
 
 =back
 

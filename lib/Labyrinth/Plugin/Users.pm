@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Users;
 use warnings;
 use strict;
 
-my $VERSION = '5.06';
+my $VERSION = '5.07';
 
 =head1 NAME
 
@@ -134,6 +134,11 @@ sub UserLists {
     LogDebug("UserList: key=[$key], rows found=[".scalar(@rows)."]");
 
     for(@rows) {
+        ($_->{width},$_->{height}) = GetImageSize($_->{link},$_->{dimensions},$_->{width},$_->{height},MaxUserWidth,MaxUserHeight);
+
+        if($_->{url} && $_->{url} !~ /^https?:/) {
+            $_->{url} = 'http://' . $_->{url};
+        }
         if($_->{aboutme}) {
             $_->{aboutme} = '<p>' . $_->{aboutme}   unless($_->{aboutme} =~ /^\s*<p>/si);
             $_->{aboutme} .= '</p>'                 unless($_->{aboutme} =~ m!</p>\s*$!si);
@@ -148,6 +153,8 @@ sub UserLists {
         } else {
             $_->{name} = $_->{nickname} || $_->{realname};
         }
+
+        $_->{gravatar} = GetGravatar($_->{userid},$_->{email});
     }
 
     $tvars{users}    = \@rows       if(@rows);
@@ -173,8 +180,10 @@ sub Item {
     return  unless $cgiparams{'userid'};
 
     my @rows = $dbi->GetQuery('hash','GetUserByID',$cgiparams{'userid'});
-
     return  unless(@rows);
+
+    $rows[0]->{gravatar} = GetGravatar($rows[0]->{userid},$rows[0]->{email});
+
     $rows[0]->{tag} = ''    if($rows[0]->{link} =~ /blank.png/);
 #   $rows[0]->{tag} = '[No Image]'  if($rows[0]->{link} =~ /blank.png/);
     $tvars{data} = $rows[0];
@@ -368,6 +377,9 @@ sub Edit {
                                           $tvars{users}{preview}{$_} = CleanHTML($tvars{users}{preview}{$_}); }
         elsif($fields{$_}->{html} == 2) { $tvars{users}{data}{$_}    = SafeHTML($tvars{users}{data}{$_});     }
     }
+
+    $tvars{users}{preview}{gravatar} = GetGravatar($tvars{users}{preview}{userid},$tvars{users}{preview}{email});
+
     $tvars{users}{preview}{link} = undef
         if($tvars{users}{data}{link} && $tvars{users}{data}{link} =~ /blank.png/);
 }

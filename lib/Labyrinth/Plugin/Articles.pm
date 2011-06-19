@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Articles;
 use warnings;
 use strict;
 
-my $VERSION = '5.06';
+my $VERSION = '5.07';
 
 =head1 NAME
 
@@ -149,35 +149,35 @@ Key variables available are:
 
 =item LatestArticles
 
-Gets a list of the latest article titles
+Retrieves a list of the latest article titles
 
 =item Archive
 
-Gets a list of the volumes available.
+Retrieves a list of the volumes available.
 
 =item List
 
-Gets a list of articles.
+Retrieves a list of articles.
 
 =item Meta
 
-Gets a list of articles based on given meta tags.
+Retrieves a list of articles based on given meta tags.
 
 =item Search
 
-Gets a list of articles based on a given search string.
+Retrieves a list of articles based on a given search string.
 
 =item Cloud
 
-Gets current tag cloud.
+Provides the current tag cloud.
 
 =item Tags
 
-Gets the current list of meta tags
+Retrieves the current list of meta tags
 
 =item Item
 
-Gets a single article.
+Provides a single article.
 
 =back
 
