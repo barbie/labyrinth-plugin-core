@@ -1,5 +1,9 @@
 Changes for the Labyrinth Core Plugins
 
+5.09	current
+	- added link titles
+	- fixed image href saving.
+
 5.08	19/06/2011
 	- GetImageSize now used for articles.
 	- GetImageSize now used in Users::Item.

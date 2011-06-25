@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Articles;
 use warnings;
 use strict;
 
-my $VERSION = '5.08';
+my $VERSION = '5.09';
 
 =head1 NAME
 
@@ -327,6 +327,8 @@ sub Item {
             ($body->{width},$body->{height}) = GetImageSize($body->{link},$rows[0]->{dimensions},$body->{width},$body->{height},MaxArticleWidth,MaxArticleHeight);
 
             #LogDebug(sprintf "%d/%s [%d x %d]", ($body->{imageid}||0),($body->{link}||'-'),($body->{width}||0),($body->{height}||0));
+        } elsif($body->{type} == PARA) {
+            $body->{body} = LinkTitles($body->{body});
         }
     }
 
@@ -600,9 +602,10 @@ sub LoadContent {
 
         # images
         if($type == IMAGE) {
-            $body[$block]->{paraid}    = $paraid;
-            $body[$block]->{imagelink} = $cgiparams{"IMAGELINK$block"};
-            $body[$block]->{align}     = $cgiparams{"ALIGN$block"};
+            $body[$block]->{paraid}     = $paraid;
+            $body[$block]->{imagelink}  = $cgiparams{"IMAGELINK$block"};
+            $body[$block]->{href}       = $cgiparams{"IMAGEHREF$block"};
+            $body[$block]->{align}      = $cgiparams{"ALIGN$block"};
             my $tag    = $cgiparams{"IMAGETAG$block"};
             my $width  = $cgiparams{"width$block"}  || MaxArticleWidth;
             my $height = $cgiparams{"height$block"} || MaxArticleHeight;
