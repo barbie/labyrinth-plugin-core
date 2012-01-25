@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Articles::Site;
 use warnings;
 use strict;
 
-my $VERSION = '5.09';
+my $VERSION = '5.10';
 
 =head1 NAME
 
@@ -169,16 +169,16 @@ Delete a site page.
 
 =cut
 
-sub Access  { Authorised(MASTER) }
+sub Access  { Authorised(EDITOR) }
 
 sub Admin {
-    return  unless AccessUser(MASTER);
+    return  unless AccessUser(EDITOR);
     $cgiparams{sectionid} = $SECTIONID;
     shift->SUPER::Admin();
 }
 
 sub Add {
-    return  unless AccessUser(MASTER);
+    return  unless AccessUser(EDITOR);
     $cgiparams{sectionid} = $SECTIONID;
     my $self = shift;
     $self->SUPER::Add();
@@ -186,7 +186,7 @@ sub Add {
 }
 
 sub Edit {
-    return  unless AccessUser(MASTER);
+    return  unless AccessUser(EDITOR);
     $cgiparams{sectionid} = $SECTIONID;
     my $self = shift;
     $self->SUPER::Edit();
@@ -194,14 +194,14 @@ sub Edit {
 }
 
 sub Save {
-    return  unless AccessUser(MASTER);
+    return  unless AccessUser(EDITOR);
     $cgiparams{sectionid} = $SECTIONID;
     $cgiparams{quickname} ||= formatDate(0);
     shift->SUPER::Save();
 }
 
 sub Delete {
-    return  unless AccessUser(MASTER);
+    return  unless AccessUser(EDITOR);
     $cgiparams{sectionid} = $SECTIONID;
     shift->SUPER::Delete();
 }
@@ -221,7 +221,7 @@ Miss Barbell Productions, L<http://www.missbarbell.co.uk/>
 
 =head1 COPYRIGHT & LICENSE
 
-  Copyright (C) 2002-2011 Barbie for Miss Barbell Productions
+  Copyright (C) 2002-2012 Barbie for Miss Barbell Productions
   All Rights Reserved.
 
   This module is free software; you can redistribute it and/or

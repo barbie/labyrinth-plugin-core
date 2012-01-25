@@ -3,7 +3,7 @@ package Labyrinth::Plugin::News;
 use warnings;
 use strict;
 
-my $VERSION = '5.09';
+my $VERSION = '5.10';
 
 =head1 NAME
 
@@ -113,7 +113,7 @@ sub Front {
     for my $row (@rows) {
         $row->{name}      = UserName($row->{userid});
         $row->{postdate}  = formatDate(3,$row->{createdate});
-        $row->{alignment} = Alignment($row->{align});
+        $row->{alignment} = AlignClass($row->{align});
     }
     $tvars{frontnews} = \@rows  if(@rows);
 }
@@ -129,7 +129,7 @@ sub Main {
         if($main) {
             $row->{name}      = UserName($row->{userid});
             $row->{postdate}  = formatDate(3,$row->{createdate});
-            $row->{alignment} = Alignment($row->{align});
+            $row->{alignment} = AlignClass($row->{align});
             push @mainnews, $row;
             $main--;
             next;
@@ -163,7 +163,7 @@ sub Item {
     if(@rows) {
         $rows[0]->{name}        = UserName($rows[0]->{userid});
         $rows[0]->{postdate}    = formatDate(3,$rows[0]->{createdate});
-        $rows[0]->{alignment}   = Alignment($rows[0]->{align});
+        $rows[0]->{alignment}   = AlignClass($rows[0]->{align});
         $tvars{news}{item} = $rows[0];
     }
 }
@@ -298,7 +298,7 @@ sub Copy {
 
 sub EditAmendments {
     $tvars{data}->{align}       = $cgiparams{ALIGN0}    if $cgiparams{ALIGN0};
-    $tvars{data}->{alignment}   = Alignment($tvars{data}->{align});
+    $tvars{data}->{alignment}   = AlignClass($tvars{data}->{align});
     $tvars{data}->{ddalign}     = AlignSelect($tvars{data}->{align});
     $tvars{data}->{ddpublish}   = PublishSelect($tvars{data}->{publish});
     $tvars{data}->{name}        = UserName($tvars{data}->{userid});
@@ -411,7 +411,7 @@ Miss Barbell Productions, L<http://www.missbarbell.co.uk/>
 
 =head1 COPYRIGHT & LICENSE
 
-  Copyright (C) 2002-2011 Barbie for Miss Barbell Productions
+  Copyright (C) 2002-2012 Barbie for Miss Barbell Productions
   All Rights Reserved.
 
   This module is free software; you can redistribute it and/or

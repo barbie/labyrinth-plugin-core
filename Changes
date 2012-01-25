@@ -1,5 +1,11 @@
 Changes for the Labyrinth Core Plugins
 
+5.10	24/01/2012
+	- config settings maximagewidth & maximageheight used to set default 
+	  size (Articles).
+	- Alignment changes as per fixes in Labyrinth-5.12.
+	- base access reset to EDITOR (Articles/Site).
+
 5.09	31/12/2011
 	- added link titles
 	- fixed image href saving.

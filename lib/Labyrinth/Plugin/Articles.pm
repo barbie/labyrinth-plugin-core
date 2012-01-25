@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Articles;
 use warnings;
 use strict;
 
-my $VERSION = '5.09';
+my $VERSION = '5.10';
 
 =head1 NAME
 
@@ -293,6 +293,9 @@ sub Item {
     my $name = $cgiparams{'name'}    || undef;
     my $naid = $cgiparams{articleid} || undef;
 
+    my $maximagewidth  = $settings{maximagewidth}  || MaxArticleWidth;
+    my $maximageheight = $settings{maximageheight} || MaxArticleHeight;
+
     unless($name || $naid) {
         $tvars{errcode} = 'ERROR';
         return;
@@ -319,12 +322,12 @@ sub Item {
     foreach my $body (@body) {
         if($body->{type} == IMAGE) {
             my @rows = $dbi->GetQuery('hash','GetImageByID',$body->{imageid});
-            $body->{link}  = $rows[0]->{link};
-            $body->{align} = Alignment($body->{align});
+            $body->{link}       = $rows[0]->{link};
+            $body->{alignclass} = AlignClass($body->{align});
             ($body->{tag},$body->{width},$body->{height}) = split(qr/\|/,$body->{body})
                 if($body->{body});
 
-            ($body->{width},$body->{height}) = GetImageSize($body->{link},$rows[0]->{dimensions},$body->{width},$body->{height},MaxArticleWidth,MaxArticleHeight);
+            ($body->{width},$body->{height}) = GetImageSize($body->{link},$rows[0]->{dimensions},$body->{width},$body->{height},$maximagewidth,$maximageheight);
 
             #LogDebug(sprintf "%d/%s [%d x %d]", ($body->{imageid}||0),($body->{link}||'-'),($body->{width}||0),($body->{height}||0));
         } elsif($body->{type} == PARA) {
@@ -502,6 +505,9 @@ sub Edit {
     return  unless AuthorCheck($GETSQL,$INDEXKEY,$LEVEL);
     $tvars{primary} = $tvars{data}->{quickname} || 'draft' . $tvars{data}->{articleid};
 
+    my $maximagewidth  = $settings{maximagewidth}  || MaxArticleWidth;
+    my $maximageheight = $settings{maximageheight} || MaxArticleHeight;
+
     # article content
     my @blocks;
     my $orderno = 1;
@@ -514,11 +520,11 @@ sub Edit {
             my @rows = $dbi->GetQuery('hash','GetImageByID',$body->{imageid});
             $rows[0]->{body} ||= '';
             ($body->{tag},$body->{width},$body->{height}) = split(qr/\|/,$body->{body});
-            $body->{link}    = $rows[0]->{link};
-            $body->{ddalign} = AlignSelect($body->{align},$orderno);
-            $body->{align}   = Alignment($body->{align});
+            $body->{link}       = $rows[0]->{link};
+            $body->{ddalign}    = AlignSelect($body->{align},$orderno);
+            $body->{alignclass} = AlignClass($body->{align});
 
-            ($body->{width},$body->{height}) = GetImageSize($body->{link},$rows[0]->{dimensions},$body->{width},$body->{height},MaxArticleWidth,MaxArticleHeight);
+            ($body->{width},$body->{height}) = GetImageSize($body->{link},$rows[0]->{dimensions},$body->{width},$body->{height},$maximagewidth,$maximageheight);
 
             LogDebug("$body->{imageid}/$body->{link} [$body->{width} x $body->{height}]");
         }
@@ -531,6 +537,9 @@ sub Edit {
         body    => \@body,
     };
     EditAmendments();
+
+    $tvars{dimensions}->{width}  = $settings{maximagewidth}  || MaxArticleWidth;
+    $tvars{dimensions}->{height} = $settings{maximageheight} || MaxArticleHeight;
 }
 
 sub AddParagraph {
@@ -593,6 +602,9 @@ sub LoadContent {
     my (@body,@ordernos);
     my @blocks = $cgiparams{'list'} ? split(",", $cgiparams{'list'}) : ();
 
+    my $maximagewidth  = $settings{maximagewidth}  || MaxArticleWidth;
+    my $maximageheight = $settings{maximageheight} || MaxArticleHeight;
+
     for my $block (@blocks) {
         my ($type,$paraid) =  split(",", $cgiparams{"BLOCK$block"});
         push @ordernos, $block;
@@ -607,8 +619,8 @@ sub LoadContent {
             $body[$block]->{href}       = $cgiparams{"IMAGEHREF$block"};
             $body[$block]->{align}      = $cgiparams{"ALIGN$block"};
             my $tag    = $cgiparams{"IMAGETAG$block"};
-            my $width  = $cgiparams{"width$block"}  || MaxArticleWidth;
-            my $height = $cgiparams{"height$block"} || MaxArticleHeight;
+            my $width  = $cgiparams{"width$block"}  || $maximagewidth;
+            my $height = $cgiparams{"height$block"} || $maximageheight;
 
             # uploaded own image
             if(defined $cgiparams{"IMAGEUPLOAD$block"} && $cgiparams{"IMAGEUPLOAD$block"}) {
@@ -632,8 +644,8 @@ sub LoadContent {
             }
 
             $tag  ||= '';
-            $width  = $cgiparams{"width$block"}  ? ($cgiparams{"width$block"}  > MaxArticleWidth  ? MaxArticleWidth  : $cgiparams{"width$block"})  : '';
-            $height = $cgiparams{"height$block"} ? ($cgiparams{"height$block"} > MaxArticleHeight ? MaxArticleHeight : $cgiparams{"height$block"}) : '';
+            $width  = $cgiparams{"width$block"}  ? ($cgiparams{"width$block"}  > $maximagewidth  ? $maximagewidth  : $cgiparams{"width$block"})  : '';
+            $height = $cgiparams{"height$block"} ? ($cgiparams{"height$block"} > $maximageheight ? $maximageheight : $cgiparams{"height$block"}) : '';
             $body[$block]->{body}   = "$tag|$width|$height";
             $body[$block]->{tag}    = $tag;
             $body[$block]->{width}  = $width;
@@ -810,14 +822,18 @@ sub Save {
         }
     }
 
-    # save image if one supplied
+    # save master image, if one supplied
     $data->{imageid} ||= 0;
     if(defined $cgiparams{"IMAGEUPLOAD0"}) {
-        ($data->{imageid}) = SaveImageFile(
-                            param   => "IMAGEUPLOAD0",
-                            stock   => 'Special',
-                            width   => MaxArticleWidth,
-                            height  => MaxArticleHeight);
+        my $maximagewidth  = $settings{maximagewidth}  || MaxArticleWidth;
+        my $maximageheight = $settings{maximageheight} || MaxArticleHeight;
+        ($data->{imageid}) = 
+            SaveImageFile(
+                param   => "IMAGEUPLOAD0",
+                stock   => 'Special',
+                width   => $maximagewidth,
+                height  => $maximageheight
+            );
     }
 
     # save article metadata
@@ -939,7 +955,7 @@ Miss Barbell Productions, L<http://www.missbarbell.co.uk/>
 
 =head1 COPYRIGHT & LICENSE
 
-  Copyright (C) 2002-2011 Barbie for Miss Barbell Productions
+  Copyright (C) 2002-2012 Barbie for Miss Barbell Productions
   All Rights Reserved.
 
   This module is free software; you can redistribute it and/or
