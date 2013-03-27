@@ -1,47 +1,53 @@
 Changes for the Labyrinth Core Plugins
 
-5.10	24/01/2012
-	- config settings maximagewidth & maximageheight used to set default 
-	  size (Articles).
-	- Alignment changes as per fixes in Labyrinth-5.12.
-	- base access reset to EDITOR (Articles/Site).
+        - change file dates changed to meet W3CDTF standards.
+        - upgraded to Test::CPAN::Meta::JSON for tests.
+        - reworked Makefile.PL for clarity.
+        - updated test suite.
+        - updated META files.
 
-5.09	31/12/2011
-	- added link titles
-	- fixed image href saving.
+5.10	2012-01-24
+        - config settings maximagewidth & maximageheight used to set default 
+          size (Articles).
+        - Alignment changes as per fixes in Labyrinth-5.12.
+        - base access reset to EDITOR (Articles/Site).
 
-5.08	19/06/2011
-	- GetImageSize now used for articles.
-	- GetImageSize now used in Users::Item.
+5.09	2011-12-31
+        - added link titles
+        - fixed image href saving.
 
-5.07	19/06/2011
-	- more documentation updates.
-	- expanded Sections functionality.
-	- update to Users to correctly reference image sizes.
-	- include gravatar references with user profiles.
+5.08	2011-06-19
+        - GetImageSize now used for articles.
+        - GetImageSize now used in Users::Item.
 
-5.06	13/03/2011
-	- updated documentation.
+5.07	2011-06-19
+        - more documentation updates.
+        - expanded Sections functionality.
+        - update to Users to correctly reference image sizes.
+        - include gravatar references with user profiles.
 
-5.05	24/02/2011
-	- update Articles to better support limit, stop and order from plugins.
+5.06	2011-03-13
+        - updated documentation.
 
-5.04	04/01/2011
-	- added Articles::Site from Labyrinth-Demo.
+5.05	2011-02-24
+        - update Articles to better support limit, stop and order from plugins.
 
-5.03	03/01/2011
-	- query added list of fields to be cleaned before displaying.
-	- update from live for saving menu options.
-	- update from live for saving user details.
+5.04	2011-01-04
+        - added Articles::Site from Labyrinth-Demo.
 
-5.02	01/01/2011
+5.03	2011-01-03
+        - query added list of fields to be cleaned before displaying.
+        - update from live for saving menu options.
+        - update from live for saving user details.
+
+5.02	2011-01-01
         - fix to check MASTER access.
 
-5.01	01/01/2011
-	- moved MasterCheck from plugins to core
+5.01	2011-01-01
+        - moved MasterCheck from plugins to core
 
-5.00	01/01/2011
-	- official release alongside Labyrinth Core.
+5.00	2011-01-01
+        - official release alongside Labyrinth Core.
 
-4.17	11/03/2010
-	- split from Labyrinth Core.
+4.17	2010-03-11
+        - split from Labyrinth Core.

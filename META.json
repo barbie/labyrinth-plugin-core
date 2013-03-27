@@ -23,27 +23,27 @@
     "prereqs" : {
         "test" : {
             "requires": {
+                "IO::File": "0",
                 "Test::More": "0.70"
             },
             "recommends": {
+                "Test::CPAN::Meta": "0",
+                "Test::CPAN::Meta::JSON": "0",
                 "Test::Pod": "1.00",
-                "Test::Pod::Coverage": "0.08",
-                "Test::CPAN::Meta": "0.13",
-                "Test::JSON::Meta": "0.08"
+                "Test::Pod::Coverage": "0.08"
             }
         },
         "runtime" : {
             "requires" : {
-              "Labyrinth": "5.12",
-
-              "Clone": "0",
-              "Config::IniFiles": "0",
-              "Digest::MD5": "0",
-              "File::Copy": "0",
-              "File::Basename": "0",
-              "Image::Size": "0",
-              "Time::Local": "0",
-              "URI::Escape": "0"
+                "Clone": "0",
+                "Config::IniFiles": "0",
+                "Digest::MD5": "0",
+                "File::Copy": "0",
+                "File::Basename": "0",
+                "Image::Size": "0",
+                "Labyrinth": "5.12",
+                "Time::Local": "0",
+                "URI::Escape": "0"
             }
         }
     },
@@ -111,7 +111,7 @@
     },
 
     "resources": {
-        "license": "http://dev.perl.org/licenses/",
+        "license": "http://www.perlfoundation.org/artistic_license_2_0",
         "bugtracker": { "web": "http://rt.cpan.org/Public/Dist/Display.html?Name=Labyrinth-Plugin-Core" },
         "repository": {
             "url": "git://github.com/barbie/labyrinth-plugin-core.git",
