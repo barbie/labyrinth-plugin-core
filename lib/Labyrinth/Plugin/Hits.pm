@@ -166,6 +166,7 @@ sub HitAlbums {
 
 sub HitPhotos {
     my $dt = time() - $WEEKS4;
+
     my @photosall = $dbi->GetQuery('hash','PhotoHitsAllTime');
     for my $row (@photosall) {
         $row->{month} = isMonth($row->{month});
@@ -177,6 +178,7 @@ sub HitPhotos {
         }
     }
     $tvars{photosall}  = \@photosall    if(@photosall);
+
     my @photosmon = $dbi->GetQuery('hash','PhotoHitsLastMonth',$dt);
     for my $row (@photosmon) {
         $row->{month} = isMonth($row->{month});

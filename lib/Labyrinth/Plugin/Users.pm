@@ -464,8 +464,8 @@ sub AdminSave {
         )   if($cgiparams{image});
 
     # in case of a new user
-    $tvars{data}->{'accessid'} = $tvars{data}->{'accessid'} ? 1 : 0;
-    $tvars{data}->{'search'}   = $tvars{data}->{'search'}   ? 1 : 0;
+    $tvars{data}->{'accessid'} = $tvars{data}->{'accessid'} || 1;
+    $tvars{data}->{'search'}   = $tvars{data}->{'search'} ? 1 : 0;
     $tvars{data}->{'realm'}    = Authorised(ADMIN) && $tvars{data}->{'realmid'} ? RealmName($tvars{data}->{realmid}) : $realm;
 
     my @fields = (  $tvars{data}{'accessid'}, $tvars{data}{'search'},
