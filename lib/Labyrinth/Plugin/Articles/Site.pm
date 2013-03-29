@@ -201,7 +201,7 @@ sub Save {
 }
 
 sub Delete {
-    return  unless AccessUser(EDITOR);
+    return  unless AccessUser(ADMIN);
     $cgiparams{sectionid} = $SECTIONID;
     shift->SUPER::Delete();
 }

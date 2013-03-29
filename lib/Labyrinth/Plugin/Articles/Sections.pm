@@ -74,11 +74,13 @@ of the current request.
 sub GetSection {
     my ($self, $section) = @_;
     my $name = $cgiparams{name};
+    $cgiparams{sectionid} = $SECTIONID;
 
     if($section) {
         $cgiparams{name} = $section;
     } else {
         my $request = $cgiparams{act} || 'home-public';
+        $request = 'home-public'    if($request eq 'user-logout');
         ($cgiparams{name}) = split("-",$request);
     }
 

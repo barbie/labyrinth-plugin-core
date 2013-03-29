@@ -291,7 +291,7 @@ sub Search {
 
 sub Item {
     my $name = $cgiparams{'name'}    || undef;
-    my $naid = $cgiparams{articleid} || undef;
+    my $naid = $cgiparams{articleid} || $cgiparams{id} || undef;
 
     my $maximagewidth  = $settings{maximagewidth}  || MaxArticleWidth;
     my $maximageheight = $settings{maximageheight} || MaxArticleHeight;
@@ -561,11 +561,13 @@ sub AddLink {
 }
 
 sub DeleteItem {
+    return  unless AccessUser($LEVEL2);
     return  unless $cgiparams{'recordid'};
     $dbi->DoQuery('DeleteContent',$cgiparams{'recordid'});
 }
 
 sub Relocate {
+    return  unless AccessUser($LEVEL);
     return  unless $cgiparams{'recordid'};
     my $move = shift;
 
@@ -887,7 +889,7 @@ sub Save {
 }
 
 sub Promote {
-    return  unless AccessUser(ADMIN);
+    return  unless AccessUser(PUBLISHER);
     my @ids = CGIArray('LISTED');
     return  unless @ids;
     for my $id (@ids) {
@@ -925,6 +927,7 @@ sub Copy {
 }
 
 sub Delete {
+    return  unless AccessUser($LEVEL2);
 #   return  unless AuthorCheck('GetArticleByID','articleid',$LEVEL);
 
     my @delete = CGIArray('LISTED');
