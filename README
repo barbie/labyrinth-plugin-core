@@ -1,63 +1,47 @@
-Labyrinth::Plugin::CorUser Contributed Perl DocumentLabyrinth::Plugin::Core(3)
+Labyrinth-Plugin-Core
+=====================
 
+This collection of modules form the core plugins used by the Labyrinth Web 
+Framework.
 
+INSTALLATION
 
-NAME
-       Labyrinth::Plugin::Core - Core Plugin documentation for Labyrinth
+To install this module type the following:
 
-DESCRIPTION
-       Documentation overview for Labyrinth Core Plugins.
+   perl Makefile.PL
+   make
+   make test
+   make install
 
-       Labyrinth began life in 2002, with a small set of plugins to enable
-       various features of web site management. The core set of plugins here
-       are those most useful to provide a basic web site management system.
+DEPENDENCIES
 
-       These plugins provide the functionality to manipulate core aspects of
-       the data used within Labyrinth. Several of these plugins only provide
-       administration features.
+This module requires these modules:
 
-       See the individual files for more details on how to use them.
+  Clone
+  Config::IniFiles
+  Digest::MD5
+  File::Copy
+  File::Basename
+  Image::Size
+  Labyrinth
+  Time::Local
+  URI::Escape
 
-ADDITIONAL FILES
-       As with the Labyrinth core package, additional files are needed to
-       enable Labyrinth and any installed plugins to work correctly. These
-       files consist of SQL, HTML template and configuration files, together
-       with some basic CSS and Javascript files.
+For testing the module requires these modules:
 
-       Please see the Labyrinth-Demo package for a set of these files.
+  IO::File
+  Test::More
 
-       However, these files are only the beginning, and to implement your
-       website, you will need to update the appropriate files to use your
-       layout design.
+For optional testing the module would like these modules:
 
-ADDITION INFORMATION
-       Although Labyrinth has long been in development, documentation has not
-       been a priority. As such much of the documentation you may need to
-       understand how to use Labyrinth is the code itself. If you have the
-       inclination, documentation patches would be very gratefully received.
+  Test::CPAN::Meta
+  Test::CPAN::Meta::JSON
+  Test::Pod
+  Test::Pod::Coverage
 
-       The Labyrinth website [1] will eventually feature a documentation site,
-       wiki and other features which are intended to provide you with the
-       information to use and extend Labyrinth as you wish.
+COPYRIGHT AND LICENSE
 
-       [1] http://labyrinth.missbarbell.co.uk
+  Copyright (C) 2002-2013 Barbie for Miss Barbell Productions
 
-SEE ALSO
-       Labyrinth
-
-       http://labyrinth.missbarbell.co.uk
-
-AUTHOR
-       Barbie, <barbie@missbarbell.co.uk> for Miss Barbell Productions,
-       <http://www.missbarbell.co.uk/>
-
-COPYRIGHT & LICENSE
-         Copyright (C) 2002-2011 Barbie for Miss Barbell Productions
-         All Rights Reserved.
-
-	 This module is free software; you can redistribute it and/or
-	 modify it under the Artistic License 2.0.
-
-
-
-perl v5.10.1                      2010-12-31        Labyrinth::Plugin::Core(3)
+  This distribution is free software; you can redistribute it and/or
+  modify it under the Artistic Licence v2.
