@@ -24,10 +24,17 @@ use base qw(Labyrinth::Plugin::Base);
 use Labyrinth::Audit;
 use Labyrinth::Globals  qw(:default);
 use Labyrinth::DBUtils;
+use Labyrinth::Media;
 use Labyrinth::MLUtils;
 use Labyrinth::Session;
 use Labyrinth::Support;
 use Labyrinth::Variables;
+
+# -------------------------------------
+# Constants
+
+use constant    MaxMenuWidth     => 400;
+use constant    MaxMenuHeight    => 400;
 
 # -------------------------------------
 # Variables
@@ -317,18 +324,31 @@ sub Edit {
     return  unless AccessUser($LEVEL);
     return  unless AuthorCheck($GETSQL,$INDEXKEY,$LEVEL);
 
+    my $script = $settings{script};
+
     my @opts = $dbi->GetQuery('hash','GetOptions',$tvars{data}->{menuid});
     for my $opt (@opts) {
+        my @images;
         if($tvars{data}->{typeid} > 1) {
             my @rs = $dbi->GetQuery('hash','GetOptImages',$opt->{optionid});
-            $opt->{'image' . $_->{typeid}} = $_->{'link'} for(@rs);
+            for(@rs) {
+                $opt->{'image' . $_->{typeid}} = $_->{'link'};
+                $opt->{'imageid' . $_->{typeid}} = $_->{'imageid'};
+            }
+            @images = map {$_->{'link'}} @rs;
         }
         $opt->{ddaccess} = AccessSelect($opt->{accessid},'ACCESS'.$opt->{optionid});
+
+        my $href = $opt->{href};
+        $href =~ s!^\?!$script\?!;                       # all query only links are local
+        push @{$tvars{preview}->{data}}, [0,0,$opt->{text},$href,($opt->{accessid}||0),$opt->{name},@images];
     }
     $tvars{data}->{options}  = \@opts   if(@opts);
     $tvars{data}->{ddtypes}  = TypeSelect($tvars{data}->{typeid});
     $tvars{data}->{ddrealms} = RealmSelect($tvars{data}->{realmid});
     $tvars{data}->{ddparent} = ParentSelect($tvars{data}->{parentid},$tvars{data}->{menuid});
+
+    $tvars{preview}->{$_} = $tvars{data}->{$_}    for(qw(title typeid parentid));
 }
 
 sub Save {
@@ -372,9 +392,9 @@ sub Save {
 
         my @rs = $dbi->GetQuery('hash','GetOptImages',$opt->{optionid});
         my %images = map {$_->{typeid} => $_->{imageid}} @rs;
-        CheckImage($images{1},'IMAGE'   ,$opt->{optionid},1)  if($tvars{data}->{typeid} > 1);
-        CheckImage($images{2},'ROLLOVER',$opt->{optionid},2)  if($tvars{data}->{typeid} > 2);
-        CheckImage($images{3},'SELECTED',$opt->{optionid},3)  if($tvars{data}->{typeid} > 3);
+        CheckImages($images{1},'IMAGEFILE',$opt->{optionid},1)  if($tvars{data}->{typeid} > 1);
+        CheckImages($images{2},'ROLLOVER' ,$opt->{optionid},2)  if($tvars{data}->{typeid} > 2);
+        CheckImages($images{3},'SELECTED' ,$opt->{optionid},3)  if($tvars{data}->{typeid} > 3);
     }
 
     # add option if requested
@@ -438,8 +458,14 @@ sub ParentSelect {
 
 sub CheckImages {
     my ($oldid,$key,$optionid,$typeid) = @_;
+    my $param = $key . $optionid;
 
-    my $file = CGIFile($key . $optionid);
+    return unless($cgiparams{$param});
+
+    my $maximagewidth  = $settings{maxmenuwidth}  || MaxMenuWidth;
+    my $maximageheight = $settings{maxmenuheight} || MaxMenuHeight;
+
+#    my $file = CGIFile($key . $optionid);
     my ($imageid) = SaveImageFile(
             param => $key . $optionid,
             stock => 'DRAFT'
