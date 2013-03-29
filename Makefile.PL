@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+hh#!/usr/bin/perl
 
 use strict;
 use warnings;
@@ -15,15 +15,15 @@ WriteMakefile(
     PREREQ_PM           => {
 
         # prereqs
+        'Clone'                 => '0',
+        'Config::IniFiles'      => '0',
+        'Digest::MD5'           => '0',
+        'File::Copy'            => '0',
+        'File::Basename'        => '0',
+        'Image::Size'           => '0',
         'Labyrinth'             => '5.12',
-        'Clone'                 => 0,
-        'Time::Local'           => 0,
-        'Image::Size'           => 0,
-        'File::Copy'            => 0,
-        'File::Basename'        => 0,
-        'Digest::MD5'           => 0,
-        'URI::Escape'           => 0,
-        'Config::IniFiles'      => 0,
+        'Time::Local'           => '0',
+        'URI::Escape'           => '0',
 
         # build/test prereqs
         'IO::File'              => '0',

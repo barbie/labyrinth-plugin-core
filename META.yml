@@ -10,6 +10,7 @@ distribution_type:        module
 installdirs:              site
 
 requires:
+  perl:                         5.006
   Clone:                        0
   Config::IniFiles:             0
   Digest::MD5:                  0
