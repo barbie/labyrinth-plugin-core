@@ -1,10 +1,13 @@
 Changes for the Labyrinth Core Plugins
 
+5.11	2013-03-30
         - change file dates changed to meet W3CDTF standards.
         - upgraded to Test::CPAN::Meta::JSON for tests.
         - reworked Makefile.PL for clarity.
         - updated test suite.
         - updated META files.
+        - fixed using images in menus.
+        - revised access to admin functions.
 
 5.10	2012-01-24
         - config settings maximagewidth & maximageheight used to set default 
