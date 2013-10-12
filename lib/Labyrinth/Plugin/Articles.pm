@@ -620,7 +620,7 @@ sub LoadContent {
             $body[$block]->{imagelink}  = $cgiparams{"IMAGELINK$block"};
             $body[$block]->{href}       = $cgiparams{"IMAGEHREF$block"};
             $body[$block]->{align}      = $cgiparams{"ALIGN$block"};
-            my $tag    = $cgiparams{"IMAGETAG$block"};
+            my $tag    = CleanTags($cgiparams{"IMAGETAG$block"});
             my $width  = $cgiparams{"width$block"}  || $maximagewidth;
             my $height = $cgiparams{"height$block"} || $maximageheight;
 
