@@ -21,7 +21,7 @@ WriteMakefile(
         'File::Copy'            => '0',
         'File::Basename'        => '0',
         'Image::Size'           => '0',
-        'Labyrinth'             => '5.12',
+        'Labyrinth'             => '5.18',
         'Time::Local'           => '0',
         'URI::Escape'           => '0',
 

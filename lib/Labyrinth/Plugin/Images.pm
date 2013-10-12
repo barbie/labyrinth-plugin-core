@@ -209,14 +209,8 @@ sub EditAmendments {
     return  unless($tvars{data}->{link});
 
     # Get the size of image
-    my $size_x = 0;
-    ($size_x) = split("x",$tvars{data}->{dimensions})   if($tvars{data}->{dimensions});
-    unless($size_x) {
-        my $file = "$settings{webdir}/$tvars{data}->{link}";
-        ($size_x) = imgsize($file)  if(-f $file);
-    }
-
-    $tvars{data}->{toobig} = 1  if($size_x > $tvars{maxpicwidth});
+    ($tvars{data}->{x_resize},$tvars{data}->{y_resize})
+        = ResizeDimensions($tvars{data}->{dimensions},"$settings{webdir}/$tvars{data}->{link}",$tvars{maxpicwidth},$tvars{maxpicheight});
 }
 
 sub Save {
@@ -306,15 +300,8 @@ sub Gallery {
 
     my @rows = $dbi->GetQuery('hash',$key.'Gallery',{where=>$where},$start);
     for(@rows) {
-        my ($x,$y);
-        if($_->{dimensions}) {
-            ($x,$y) = split("x",$_->{dimensions});
-        } else {
-            ($x,$y) = imgsize($settings{webdir}.'/'.$_->{link});
-        }
-
-        $_->{width}  = ($x > $y) ? 100 : 0;
-        $_->{height} = ($x < $y) ? 100 : 0;
+        ($_->{width},$_->{heigth})
+            = ResizeDimensions($_->{dimensions},"$settings{webdir}/$_->{link}",100,100);
     }
 
     $tvars{next} = $rows[9]->{imageid}  unless(@rows < 10);
