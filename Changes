@@ -1,5 +1,7 @@
 Changes for the Labyrinth Core Plugins
+======================================
 
+5.12    2013-10-13
         - prevent HTML tags being added to image text tags.
         - use ResizeDimensions where appropriate. (requires Labyrinth 5.18)
 

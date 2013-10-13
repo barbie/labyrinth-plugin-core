@@ -10,7 +10,7 @@ WriteMakefile(
     AUTHOR              => 'Barbie <barbie@cpan.org>',
     NAME                => 'Labyrinth::Plugin::Core',
     VERSION_FROM        => 'lib/Labyrinth/Plugin/Core.pm',
-    ABSTRACT            => 'Core Labyrinth codebase - Core Plugins',
+    ABSTRACT            => 'Labyrinth Website Management Framework Core Plugins',
     NO_META             => 1,
     PREREQ_PM           => {
 
