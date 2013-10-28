@@ -17,6 +17,7 @@ WriteMakefile(
         # prereqs
         'Clone'                 => '0',
         'Config::IniFiles'      => '0',
+        'Data::Pageset'         => '0',
         'Digest::MD5'           => '0',
         'File::Copy'            => '0',
         'File::Basename'        => '0',

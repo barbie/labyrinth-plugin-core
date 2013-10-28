@@ -157,6 +157,10 @@ Retrieves a list of the latest article titles
 
 Retrieves a list of the volumes available.
 
+=item Page
+
+Retrieves an set of articles, for a given page. Default to first page.
+
 =item List
 
 Retrieves an initial list of articles. Primarily used to prepare a front page.
@@ -203,6 +207,42 @@ sub Archive {
 
     my @rows = $dbi->GetQuery('hash','GetVolumes',$cgiparams{sectionid});
     $tvars{archive}{$cgiparams{section}} = \@rows   if(@rows);
+}
+
+sub Page {
+    my @mainarts;
+    $cgiparams{name} = undef;
+    my $page = $cgiparams{page} || 1;
+    
+    my $limit = $settings{data}{article_pageset} || MAINPAGE;
+    my $sectionid = $cgiparams{sectionid} || $SECTIONID;
+    my @where = ("sectionid=$sectionid","publish=3");
+    my $where = 'WHERE ' . join(' AND ',@where);
+    my $order = 'ORDER BY ' . ($settings{data}{order} || 'createdate DESC');
+    my @rows = $dbi->GetQuery('hash',$ALLSQL,{where=>$where,order=>$order});
+
+    my $page_info = Data::Pageset->new({
+        'total_entries'       => scalar(@rows), 
+        'entries_per_page'    => $limit, 
+        # Optional, will use defaults otherwise.
+        'current_page'        => $page,
+        #'pages_per_set'       => $pages_per_set,
+        #'mode'                => 'fixed', # default, or 'slide'
+    });
+
+    $tvars{pages}{first}    = $page_info->first_page;
+    $tvars{pages}{last}     = $page_info->last_page;
+    $tvars{pages}{next}     = $page_info->next_page;
+    $tvars{pages}{previous} = $page_info->previous_page;
+
+    my @arts = splice(@rows, ($page - 1) * $limit, $limit);
+    for my $row (@arts) {
+        $cgiparams{articleid} = $row->{articleid};
+        Item();
+        push @mainarts, $tvars{articles}->{$tvars{primary}};
+    }
+    $tvars{mainarts} = \@mainarts   if(@mainarts);
+    $cgiparams{sectionid} = undef;
 }
 
 sub List {
