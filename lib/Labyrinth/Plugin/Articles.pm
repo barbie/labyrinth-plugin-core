@@ -22,6 +22,7 @@ framework.
 use base qw(Labyrinth::Plugin::Base);
 
 use Clone qw(clone);
+use Data::Pageset;
 
 use Labyrinth::Audit;
 use Labyrinth::DBUtils;
@@ -57,17 +58,18 @@ use constant    LIMIT_LATEST    => 20;
 
 my %fields = (
     articleid   => { type => 0, html => 0 },
-    postdate    => { type => 0, html => 0 },
+    postdate    => { type => 0, html => 1 },
     quickname   => { type => 1, html => 1 },
     title       => { type => 1, html => 1 },
-    publish     => { type => 1, html => 0 },
+    publish     => { type => 1, html => 1 },
     folderid    => { type => 0, html => 0 },
     userid      => { type => 0, html => 0 },
     snippet     => { type => 0, html => 2 },
-    front       => { type => 0, html => 0 },
+    front       => { type => 0, html => 1 },
+    latest      => { type => 0, html => 1 },
     sectionid   => { type => 0, html => 0 },
-    width       => { type => 0, html => 0 },
-    height      => { type => 0, html => 0 },
+    width       => { type => 0, html => 1 },
+    height      => { type => 0, html => 1 },
     body        => { type => 0, html => 2 },
     metadata    => { type => 0, html => 1 },
 );
@@ -157,7 +159,7 @@ Retrieves a list of the volumes available.
 
 =item List
 
-Retrieves a list of articles.
+Retrieves an initial list of articles. Primarily used to prepare a front page.
 
 =item Meta
 
@@ -467,10 +469,10 @@ sub Add {
     my @fields = (  $data{folderid},
                     'DRAFT',
                     $data{userid},
-                    formatDate(0),
                     $data{sectionid},
                     $tvars{primary},
-                    1);
+                    1,
+                    formatDate(0));
     $data{articleid} = $dbi->IDQuery('AddArticle',@fields);
     $data{quickname} = 'ID'.$data{articleid};
 
@@ -707,8 +709,9 @@ sub LoadContent {
     $cgiparams{quickname} = lc $cgiparams{quickname};
 
     my %data = map {$_ => ($cgiparams{$_} || $tvars{data}->{$_})}
-                    qw(articleid createdate folderid userid title quickname publish snippet front sectionid);
+                    qw(articleid createdate folderid userid title quickname publish snippet front latest sectionid);
     $data{front}    = ($data{'front'} ? 1 : 0);
+    $data{latest}   = ($data{'latest'} ? 1 : 0);
     $data{imageid}  = $cgiparams{'display0'};
     $data{postdate} = formatDate(6,$data{createdate});
 
@@ -805,11 +808,12 @@ sub Save {
 
     return  if($tvars{errcode});
 
-    $data->{front} = $data->{front} ? 1 : 0;
+    $data->{front}       = $data->{front}  ? 1 : 0;
+    $data->{latest}      = $data->{latest} ? 1 : 0;
+    $data->{createdate}  =   formatDate(0)                      if($data->{publish} == 3 && $publish < 3);
+    $data->{createdate}  = unformatDate(3,$cgiparams{postdate}) if($cgiparams{postdate});
+    $data->{userid}    ||= $tvars{loginid};
     $data->{sectionid} ||= 1;           # default 1 = article
-    $data->{createdate} =   formatDate(0)                      if($data->{publish} == 3 && $publish < 3);
-    $data->{createdate} = unformatDate(3,$cgiparams{postdate}) if($cgiparams{postdate});
-    $data->{userid} ||= $tvars{loginid};
 
     if($sectionid == 6) {
         if($data->{publish} == 3 && $publish < 3) {
@@ -848,6 +852,7 @@ sub Save {
                     $data->{snippet},
                     $data->{imageid},
                     $data->{front},
+                    $data->{latest},
                     $data->{publish},
                     $data->{createdate},
                     $data->{articleid}

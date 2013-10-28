@@ -1,6 +1,10 @@
 Changes for the Labyrinth Core Plugins
 ======================================
 
+        - reinstated store of 'latest' field.
+        - reworked AddArticle field order to compliment SaveArticle (not
+          backwards compatible).
+
 5.12    2013-10-13
         - prevent HTML tags being added to image text tags.
         - use ResizeDimensions where appropriate. (requires Labyrinth 5.18)
