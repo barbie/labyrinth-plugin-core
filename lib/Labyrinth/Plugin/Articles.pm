@@ -431,15 +431,27 @@ Relocate an article in a list, where an order is in use.
 
 =item LoadContent
 
+Load complete article from form fields, save all image and media files.
+
 =item EditAmendments
+
+Additional drop downs and fields prepared for edit form.
 
 =item Save
 
+Save an article within the current section.
+
 =item Promote
+
+Promote the given article within the current section.
 
 =item Copy
 
+Copy an article, to create a new article, within the current section.
+
 =item Delete
+
+Delete a given article within the current section.
 
 =back
 
