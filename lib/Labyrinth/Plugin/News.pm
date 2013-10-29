@@ -174,23 +174,44 @@ sub Item {
 
 =item Access
 
+Check whether user has access to admin functions. Must be Editor or greater.
+
 =item ImageCheck
+
+Checks whether images are being referenced in a news item. Used to allow the 
+images plugin to delete unused images.
 
 =item Admin
 
+List new items.
+
 =item Add
+
+Create a template variable hash to create a news item.
 
 =item Edit
 
+Edit the given news item.
+
 =item Copy
+
+Copy a specified news item to create a new one. Called via Admin().
 
 =item EditAmendments
 
+Provide additional drop downs and fields for editing.
+
 =item Promote
+
+Promote the given news item.
 
 =item Save
 
+Save the given news item.
+
 =item Delete
+
+Delete the listed news items. Called via Admin().
 
 =back
 

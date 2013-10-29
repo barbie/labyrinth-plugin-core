@@ -14,6 +14,15 @@ Labyrinth::Plugin::Inbox - Inbox plugin handler for Labyrinth
 Contains all the inbox/message handling functionality for the Labyrinth
 framework.
 
+Note that although this module was originally used to alert changes within
+the content management framework, the methods within have been little used.
+As such, they are being looked at with a view to redesigning in the future.
+
+The intention with approval and decline, is to hook into the appropriate
+plugin to promote the specified item, such as an article, news item or event.
+This functionality would only be used by publishers to review items submittd
+by writers/editors.
+
 =cut
 
 # -------------------------------------
@@ -34,13 +43,23 @@ use Labyrinth::Variables;
 
 =item InboxCheck
 
+Provide a count of messages in the inbox.
+
 =item InboxView
+
+Provide a list of message headers in the inbox.
 
 =item MessageView
 
+Read a specific message.
+
 =item MessageApprove
 
+Approve the action of a specific message.
+
 =item MessageDecline
+
+Decline the action of a specific message.
 
 =back
 

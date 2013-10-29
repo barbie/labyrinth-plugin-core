@@ -56,17 +56,31 @@ my $LEVEL       = ADMIN;
 
 =item Admin
 
+Lists the current set of folders.
+
 =item Add
+
+Add a new folder.
 
 =item AddLinkRealm
 
+Add a link between the specified folder and realm.
+
 =item Edit
+
+Edit specified folder.
 
 =item Save
 
+Save specified folder.
+
 =item Delete
 
+Delete specified folder.
+
 =item DeleteLinkRealm
+
+Delete a link between the specified folder and realm.
 
 =back
 

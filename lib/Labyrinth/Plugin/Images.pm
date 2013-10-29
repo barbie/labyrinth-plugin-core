@@ -71,15 +71,29 @@ my $LEVEL = ADMIN;
 
 =head1 PUBLIC INTERFACE METHODS
 
+The following are convience methods to provide the appropriate functionality 
+to list the require number of random images for the page.
+
+These are to be deprecated in the future, in favour of using configuration
+settings and/or parameter values.
+
 =over 4
 
 =item Random()
 
+Stores a random image in template variable 'irandX', where X is 1.
+
 =item Random4()
+
+Stores 4 random images in template variable 'irandX', where X is 1 to 4.
 
 =item Random6()
 
+Stores 6 random images in template variable 'irandX', where X is 1 to 6.
+
 =item Random8()
+
+Stores 8 random images in template variable 'irandX', where X is 1 to 8.
 
 =back
 
@@ -95,6 +109,8 @@ sub Random8 { RandomN(8);   }
 =over 4
 
 =item RandomN()
+
+Provide 'n' random images, prefixed in a template variable with 'irand'.
 
 =back
 
@@ -127,21 +143,38 @@ sub RandomN {
 
 =head1 ADMIN INTERFACE METHODS
 
+Note that in all cases the images referred to do not include photos uploaded
+via the Album plugin, for photo albums.
+
 =over 4
 
 =item List
 
+List all uploaded images.
+
 =item Add
+
+Create a template variable hash for a new image.
 
 =item Edit
 
+Edit the attributes of a given image.
+
 =item EditAmendments
+
+Additional drop downs and fields for editing.
 
 =item Save
 
+Save a given image.
+
 =item Delete
 
+Delete a given image.
+
 =item Gallery
+
+Provide a set of images as a gallery for selection.
 
 =back
 

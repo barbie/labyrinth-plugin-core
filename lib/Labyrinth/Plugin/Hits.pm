@@ -65,11 +65,19 @@ Records the hit for the current page and photo (if applicable).
 
 =item HitPages
 
+List of hit stats for site pages.
+
 =item HitAlbums
+
+List of hit stats for galley albums.
 
 =item HitPhotos
 
+List of hit stats for galley photos.
+
 =item HitSelects
+
+Compile contents of the drop downs on hit pages.
 
 =back
 
@@ -207,11 +215,23 @@ sub HitSelects {
 
 =item AdminUpdates
 
+List the last site page updates, via the 'AdminUpdates' phrasebook query.
+
 =item SetUpdates
+
+Store page and site update from current timestamp.
 
 =item AdminHits
 
+Shorthand method to list all the hit counters for admin use.
+
 =item Reset
+
+Original method to reset hit counters, such that individual counters older than
+a given date, are summed and stored in one counter entry.
+
+This is being deprecated in favour of a new script, which will be incorporated
+here in the future.
 
 =back
 

@@ -85,6 +85,9 @@ my %adddata = (
 
 =item LoadMenus
 
+Loads all the menus used within the system, and stores them within the 'menu'
+template variable hash, using the menuid as the key to each.
+
 =back
 
 =cut
@@ -275,23 +278,43 @@ sub _LoadMenus {
 
 =item Admin
 
+List current menus.
+
 =item Add
+
+Add a new menu.
 
 =item Edit
 
+Edit a given menu.
+
 =item Save
+
+Save the given menu.
 
 =item Delete
 
+Delete the given menu.
+
 =item DeleteOptions
+
+Delete the specified option(s) of a given menu.
 
 =item TypeSelect
 
+Provide a drop down list of menu option types.
+
 =item TypeName
+
+Provide the name of the given option type.
 
 =item ParentSelect
 
+Provides a drop down in order to enable multiple levels of menus and options.
+
 =item CheckImages
+
+Stores the image for a menu option state.
 
 =back
 

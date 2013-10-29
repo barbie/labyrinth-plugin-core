@@ -77,17 +77,32 @@ my $LEVEL = ADMIN;
 
 =item UserLists
 
+Provide the current user list, taking into account of any search strings and
+filters.
+
 =item Gravatar
+
+Provide the gravatar for a specified user.
 
 =item Item
 
+Provide the content attributed to the specified user.
+
 =item Name
+
+Provide the name of the specified user.
 
 =item Password
 
+Check and store a change of password.
+
 =item Register
 
+Provide the template variable hash for a new user to register.
+
 =item Registered
+
+Set the email address for the newly registered user, to auto log them in.
 
 =back
 
@@ -275,7 +290,11 @@ sub Registered {
 
 =item Login
 
+Action the login functionality to the site.
+
 =item Logout
+
+Action the logout functionality to the site.
 
 =item Store
 
@@ -283,25 +302,50 @@ sub Registered {
 
 =item LoggedIn
 
+Check with the current user is logged in.
+
 =item ImageCheck
+
+Check whether images uploaded for the user profile are still being used. Used
+to allow the images plugin to delete unused images.
 
 =item Admin
 
+List current users.
+
 =item Add
+
+Provide the template variable hash to create a new user.
 
 =item Edit
 
+Edit the given user.
+
 =item Save
+
+Save the given user. For use by the currently logged in user.
 
 =item AdminSave
 
+Save the given user. For use by admin user to update any non-system user.
+
 =item Delete
+
+Delete the specified user.
 
 =item Ban
 
+Ban the specified user.
+
 =item AdminPass
 
+Allow the admin user to create a new password of a given user.
+
+Note passwords are store in an encrypted format, so cannot be viewed.
+
 =item AdminChng
+
+Allow the admin user to change the password of a given user.
 
 =cut
 
@@ -556,9 +600,15 @@ sub AdminChng {
 
 =item ACL
 
+List the current access control levels for the given user.
+
 =item ACLSave
 
+Save changes to the current access control levels for the given user.
+
 =item ACLDelete
+
+Delete the specified access control level for the given user.
 
 =cut
 

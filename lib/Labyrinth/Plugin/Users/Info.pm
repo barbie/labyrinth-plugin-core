@@ -66,7 +66,9 @@ my $LEVEL = ADMIN;
 
 =over 4
 
-=item Item()
+=item Item
+
+Provides the addition user information for the given user.
 
 =back
 
@@ -84,11 +86,19 @@ sub Item {
 
 =item Edit
 
+Edit the addition user information for the given user.
+
 =item Save
+
+Save the addition user information for the given user.
 
 =item Delete
 
+Delete the addition user information for the given user.
+
 =item LoadInfo
+
+Load the user information required.
 
 =back
 
