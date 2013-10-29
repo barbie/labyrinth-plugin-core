@@ -88,7 +88,7 @@ our $GETSQL     = 'GetArticleByID';
 our $DELETESQL  = 'DeleteRecords';
 our $PROMOTESQL = 'PromoteArticle';
 our $LEVEL      = EDITOR;
-my $LEVEL2      = ADMIN;
+our $LEVEL2     = PUBLISHER;
 
 # sectionid is used to reference different types of articles,
 # however, the default is also a standard article.
@@ -138,7 +138,8 @@ Key variables available are:
   our $GETSQL     = 'GetArticleByID';
   our $DELETESQL  = 'DeleteRecords';
   our $PROMOTESQL = 'PromoteArticle';
-  our $LEVEL      = EDITOR;
+  our $LEVEL      = EDITOR;             # for normal admin actions
+  our $LEVEL2     = PUBLISHER;          # for delete actions
 
 =cut
 

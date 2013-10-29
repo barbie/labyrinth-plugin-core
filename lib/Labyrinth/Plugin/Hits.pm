@@ -219,7 +219,7 @@ List the last site page updates, via the 'AdminUpdates' phrasebook query.
 
 =item SetUpdates
 
-Store page and site update from current timestamp.
+Store page and site update from current timestamp. Only called internally.
 
 =item AdminHits
 
@@ -238,7 +238,7 @@ here in the future.
 =cut
 
 sub AdminUpdates {
-    return  unless AccessUser(ADMIN);
+    return  unless AccessUser(EDITOR);
     my @rs = $dbi->GetQuery('hash','AdminUpdates');
 
     foreach my $rec (@rs) {
@@ -272,7 +272,7 @@ sub SetUpdates {
 }
 
 sub AdminHits {
-    return  unless AccessUser(ADMIN);
+    return  unless AccessUser(EDITOR);
     HitPages();
     HitAlbums();
     HitPhotos();

@@ -100,6 +100,8 @@ sub UserGroups {
 
 =head1 ADMIN INTERFACE METHODS
 
+All action methods are only accessible by users with admin permission.
+
 =over 4
 
 =item Admin

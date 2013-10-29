@@ -77,6 +77,7 @@ my $GETSQL      = 'GetNewsByID';
 my $DELETESQL   = 'DeleteNews';
 my $PROMOTESQL  = 'PromoteNews';
 my $LEVEL       = EDITOR;
+my $LEVEL2      = ADMIN;
 my $NEXTCOMMAND = 'news-edit';
 
 # -------------------------------------
@@ -267,7 +268,7 @@ sub Admin {
 sub Add {
     return  unless AccessUser($LEVEL);
     my $ddpublish;
-    if(Authorised(ADMIN)) {
+    if(Authorised($LEVEL2)) {
         $ddpublish = PublishSelect($tvars{data}->{publish});
     } else {
         $ddpublish = PublishAction(1,1);
@@ -326,7 +327,7 @@ sub EditAmendments {
     $tvars{data}->{postdate}    = formatDate(3,$tvars{data}->{createdate});
     $tvars{data}->{body}        =~ s/^\s+//;
 
-    if(Authorised(ADMIN)) {
+    if(Authorised($LEVEL2)) {
         $tvars{data}->{ddpublish} = PublishSelect($tvars{data}->{publish});
     } else {
         my $promote = 0;
@@ -407,7 +408,7 @@ sub Save {
 }
 
 sub Delete {
-    return  unless AccessUser(ADMIN);
+    return  unless AccessUser($LEVEL2);
     my @ids = CGIArray('LISTED');
     return  unless @ids;
     for my $id (@ids) {

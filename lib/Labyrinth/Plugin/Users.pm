@@ -481,7 +481,7 @@ sub Save {
 }
 
 sub AdminSave {
-    return  unless AccessUser(ADMIN);
+    return  unless AccessUser($LEVEL);
     return  unless MasterCheck();
 
     my $newuser = $cgiparams{'userid'} ? 0 : 1;
