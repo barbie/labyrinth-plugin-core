@@ -1,6 +1,7 @@
 Changes for the Labyrinth Core Plugins
 ======================================
 
+5.13    2013-10-29
         - reinstated store of 'latest' field.
         - reworked AddArticle field order to compliment SaveArticle (not
           backwards compatible).
