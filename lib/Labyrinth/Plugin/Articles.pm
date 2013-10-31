@@ -328,7 +328,7 @@ sub Search {
     for my $row (@rows) {
         $cgiparams{articleid} = $row->{articleid};
         Item();
-        push @{$tvars{articles}}, $tvars{$tvars{primary}};
+        push @{$tvars{mainarts}}, $tvars{articles}{$tvars{primary}};
     }
 }
 
