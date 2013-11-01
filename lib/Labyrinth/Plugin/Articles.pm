@@ -192,7 +192,7 @@ Provides a single article.
 
 sub LatestArticles {
     # latest Articles list
-    my $limit = $settings{limitlatest} || LIMIT_LATEST;
+    my $limit = $settings{article_latest} || LIMIT_LATEST;
     my @rows = $dbi->GetQuery('hash','GetArticlesLatest',{limit => $limit});
     LogDebug("Latest:rows=".scalar(@rows));
     for my $row (@rows) {
@@ -215,7 +215,7 @@ sub Page {
     $cgiparams{name} = undef;
     my $page = $cgiparams{page} || 1;
     
-    my $limit = $settings{data}{article_pageset} || MAINPAGE;
+    my $limit = $settings{data}{article_pageset} || $settings{article_pageset} || MAINPAGE;
     my $sectionid = $cgiparams{sectionid} || $SECTIONID;
     my @where = ("sectionid=$sectionid","publish=3");
     my $where = 'WHERE ' . join(' AND ',@where);
@@ -250,7 +250,8 @@ sub List {
     my (@mainarts,@inbrief,@archive);
     $cgiparams{name} = undef;
 
-    my $limit = "LIMIT $settings{data}{article_limit}"  if($settings{data}{article_limit});
+    my $limit = $settings{data}{article_limit} || $settings{article_limit};
+    my $step  = "LIMIT $limit"  if($limit);
     my $stop  = $settings{data}{article_stop} || MAINPAGE;
     
     my $sectionid = $cgiparams{sectionid} || $SECTIONID;
@@ -259,7 +260,7 @@ sub List {
     my $where = 'WHERE ' . join(' AND ',@where);
     my $order = 'ORDER BY ' . ($settings{data}{order} || 'createdate DESC');
 
-    my @rows = $dbi->GetQuery('hash',$ALLSQL,{where=>$where,limit=>$limit,order=>$order});
+    my @rows = $dbi->GetQuery('hash',$ALLSQL,{where=>$where,limit=>$step,order=>$order});
     for my $row (@rows) {
         if($stop) {
             $cgiparams{articleid} = $row->{articleid};
@@ -284,21 +285,36 @@ sub List {
 }
 
 sub Meta {
-    my $sectionid = $cgiparams{sectionid} || $SECTIONID;
-    my $limit = $settings{limit};
-    my @data = split(qr/[ ,]+/,$cgiparams{data});
+    my $page        = $cgiparams{page} || 1;
+    my $limit       = $settings{data}{article_pageset} || $settings{article_pageset} || MAINPAGE;
+    my $sectionid   = $cgiparams{sectionid} || $SECTIONID;
 
+    my @data = split(qr/[ ,]+/,$cgiparams{data});
     my @rows = MetaSearch(  'keys'  => ['Art'],
                             'meta'  => \@data,
                             'where' => "sectionid=$sectionid AND publish=3",
-                            'limit' => ($limit || ''),
+                            'limit' => '',
                             'order' => 'createdate',
                             'sort'  => 'desc');
-    for my $row (@rows) {
+
+    my $page_info = Data::Pageset->new({
+        'total_entries'       => scalar(@rows), 
+        'entries_per_page'    => $limit, 
+        'current_page'        => $page,
+    });
+
+    my @arts = splice(@rows, ($page - 1) * $limit, $limit);
+    for my $row (@arts) {
         $cgiparams{articleid} = $row->{articleid};
         Item();
         push @{$tvars{mainarts}}, $tvars{articles}{$tvars{primary}};
     }
+
+    $tvars{pages}{first}    = $page_info->first_page;
+    $tvars{pages}{last}     = $page_info->last_page;
+    $tvars{pages}{next}     = $page_info->next_page;
+    $tvars{pages}{previous} = $page_info->previous_page;
+    $tvars{pages}{data}     = $cgiparams{data};
 }
 
 sub Cloud {
@@ -314,22 +330,37 @@ sub Tags {
 }
 
 sub Search {
-    my $sectionid = $cgiparams{sectionid} || $SECTIONID;
-    my $limit = $settings{limit};
-    my @data = split(qr/[ ,]+/,$cgiparams{data});
+    my $page        = $cgiparams{page} || 1;
+    my $limit       = $settings{data}{article_pageset} || $settings{article_pageset} || MAINPAGE;
+    my $sectionid   = $cgiparams{sectionid} || $SECTIONID;
 
+    my @data = split(qr/[ ,]+/,$cgiparams{data});
     my @rows = MetaSearch(  'keys'  => ['Art'],
                             'meta'  => \@data,
                             'full'  => 1,
                             'where' => "sectionid=$sectionid AND publish=3",
-                            'limit' => ($limit || ''),
+                            'limit' => '',
                             'order' => 'createdate',
                             'sort'  => 'desc');
-    for my $row (@rows) {
+
+    my $page_info = Data::Pageset->new({
+        'total_entries'       => scalar(@rows), 
+        'entries_per_page'    => $limit, 
+        'current_page'        => $page,
+    });
+
+    my @arts = splice(@rows, ($page - 1) * $limit, $limit);
+    for my $row (@arts) {
         $cgiparams{articleid} = $row->{articleid};
         Item();
         push @{$tvars{mainarts}}, $tvars{articles}{$tvars{primary}};
     }
+
+    $tvars{pages}{first}    = $page_info->first_page;
+    $tvars{pages}{last}     = $page_info->last_page;
+    $tvars{pages}{next}     = $page_info->next_page;
+    $tvars{pages}{previous} = $page_info->previous_page;
+    $tvars{pages}{data}     = $cgiparams{data};
 }
 
 sub Item {
