@@ -610,6 +610,14 @@ sub AdminChng {
 
 List the current access control levels for the given user.
 
+=item ACLAdd1
+
+Apply the given profile to the current user's folders.
+
+=item ACLAdd2
+
+Add permissions for the current user to the given folder.
+
 =item ACLSave
 
 Save changes to the current access control levels for the given user.
