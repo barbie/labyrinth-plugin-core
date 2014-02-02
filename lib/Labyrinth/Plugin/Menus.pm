@@ -16,6 +16,15 @@ framework.
 
 =cut
 
+# menu array
+# 0 = ?
+# 1 = selected=1, unselected=0
+# 2 = title
+# 3 = href
+# 4 = access
+# 5 = text
+# 6.. = images
+
 # -------------------------------------
 # Library Modules
 

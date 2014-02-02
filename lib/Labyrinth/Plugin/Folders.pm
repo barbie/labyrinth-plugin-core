@@ -33,10 +33,10 @@ use Labyrinth::Variables;
 # html: 0 = none, 1 = text, 2 = textarea
 
 my %fields = (
-    foldername  => { type => 1, html => 1 },
-    parent      => { type => 1, html => 0 },
-    folderid    => { type => 1, html => 0 },
-    ref         => { type => 1, html => 0 },
+    folderid    => { type => 0, html => 1 },
+    path        => { type => 1, html => 1 },
+    parent      => { type => 0, html => 1 },
+    accessid    => { type => 1, html => 1 }
 );
 
 my (@mandatory,@allfields);
@@ -44,6 +44,16 @@ for(keys %fields) {
     push @mandatory, $_     if($fields{$_}->{type});
     push @allfields, $_;
 }
+
+my @savefields  = qw(path accessid parent);
+
+my $LEVEL       = ADMIN;
+my $INDEXKEY    = 'folderid';
+my $ALLSQL      = 'AllFolders';
+my $GETSQL      = 'GetFolder';
+my $SAVESQL     = 'UpdateFolder';
+my $ADDSQL      = 'InsertFolder';
+my $DELETESQL   = 'DeleteFolder';
 
 # -------------------------------------
 # The Subs
@@ -61,10 +71,6 @@ Lists the current set of folders.
 =item Add
 
 Add a new folder.
-
-=item AddLinkRealm
-
-Add a link between the specified folder and realm.
 
 =item Edit
 
@@ -89,55 +95,39 @@ Delete a link between the specified folder and realm.
 sub Admin {
     return  unless AccessUser(ADMIN);
 
-    my @where = ();
-    push @where, "foldername LIKE '%$cgiparams{'searchname'}%'" if($cgiparams{'searchname'});
-    my $where = @where ? 'WHERE '.join(' AND ',@where) : '';
+    if($cgiparams{doaction}) {
+           if($cgiparams{doaction} eq 'Delete' ) { Delete();  }
+    }
 
-    my @rows = $dbi->GetQuery('hash','AllFolders',{where=>$where});
+    my @rows = $dbi->GetQuery('hash','AllFolders');
     $tvars{data} = \@rows   if(@rows);
 }
 
 sub Add {
     return  unless AccessUser(ADMIN);
-}
-
-sub AddLinkRealm {
-    return  unless AccessUser(ADMIN);
-    return  unless $cgiparams{'folderid'};
-    return  unless $cgiparams{'realmid'};
-
-    $dbi->DoQuery('AddLinkRealm',$cgiparams{'realmid'},$cgiparams{'folderid'});
-
-    if($cgiparams{'tree'}) {
-        my @rows = $dbi->GetQuery('hash','GetFolder',$cgiparams{'folderid'});
-        @rows = $dbi->GetQuery('hash','GetFoldersByRefs',{xref => $rows[0]->{'ref'}});
-
-        foreach (@rows) {
-            $dbi->DoQuery('AddLinkRealm',$cgiparams{'realmid'},$_->{folderid});
-        }
-    }
+    $tvars{data} = {
+        path        => '',
+        ddaccess    => AccessSelect(1),
+        ddparent    => FolderSelect(1,'parent')
+    };
 }
 
 sub Edit {
-    return  unless AccessUser(ADMIN);
-    return  unless $cgiparams{'folderid'};
+    return  unless AccessUser($LEVEL);
+    return  unless( $cgiparams{'folderid'} && $cgiparams{'folderid'} > 1 );
 
     my @rows = $dbi->GetQuery('hash','GetFolder',$cgiparams{'folderid'});
     return  unless(@rows);
 
     $tvars{data} = $rows[0];
-
-    my @grows = $dbi->GetQuery('hash','LinkGroups',$cgiparams{'groupid'});
-
-    for(keys %fields) {
-        if($fields{$_}->{html} == 1)    { $tvars{data}->{$_} = CleanHTML($tvars{data}->{$_}) }
-        elsif($fields{$_}->{html} == 2) { $tvars{data}->{$_} = SafeHTML($tvars{data}->{$_}) }
-    }
+    $tvars{data}{ddaccess} = AccessSelect($rows[0]->{accessid});
+    $tvars{data}{ddparent} = FolderSelect($rows[0]->{parent},'parent');
 }
 
 sub Save {
-    return  unless AccessUser(ADMIN);
-    return  unless AuthorCheck('GetFolder','folderid');
+    return  unless AccessUser($LEVEL);
+    return  unless AuthorCheck('GetFolder',$INDEXKEY);
+
     for(keys %fields) {
            if($fields{$_}->{html} == 1) { $cgiparams{$_} = CleanHTML($cgiparams{$_}) }
         elsif($fields{$_}->{html} == 2) { $cgiparams{$_} = CleanTags($cgiparams{$_}) }
@@ -146,28 +136,22 @@ sub Save {
 
     return  if FieldCheck(\@allfields,\@mandatory);
 
-    $dbi->DoQuery('SaveFolder', $tvars{data}->{'foldername'},
-                                $tvars{data}->{'parent'},
-                                $tvars{data}->{'ref'},
-                                $tvars{data}->{'folderid'});
+    my @fields = map {$tvars{data}->{$_}} @savefields;
+    if($cgiparams{$INDEXKEY}) {
+        $dbi->DoQuery($SAVESQL,@fields,$cgiparams{$INDEXKEY});
+    } else {
+        $cgiparams{$INDEXKEY} = $dbi->IDQuery($ADDSQL,@fields);
+    }
+
+    $tvars{thanks} = 1;
 }
 
 sub Delete {
     return  unless AccessUser(ADMIN);
-    return  unless $cgiparams{'folderid'};
+    my @ids = CGIArray('LISTED');
+    return  unless @ids;
 
-    $dbi->DoQuery('DeleteFolderIndex',$cgiparams{'folderid'});
-    $dbi->DoQuery('DeleteFolder',$cgiparams{'folderid'});
-}
-
-sub DeleteLinkRealm {
-    return  unless AccessUser(ADMIN);
-    my @rows = $dbi->GetQuery('hash','GetFolder',$cgiparams{'folderid'});
-    @rows = $dbi->GetQuery('hash','GetFoldersByRefs',{xref => $rows[0]->{'ref'}});
-    my $ids = join(",",map {$_->{folderid}} @rows);
-    $ids = ($ids ? ",$cgiparams{'folderid'}" : $cgiparams{'folderid'});
-
-    $dbi->DoQuery('DeleteLinkRealm',$cgiparams{'realmid'},{ids => $ids});
+    $dbi->DoQuery($DELETESQL,{ids=>join(",",@ids)});
 }
 
 1;

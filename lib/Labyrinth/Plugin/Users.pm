@@ -216,7 +216,9 @@ sub Password {
     $cgiparams{'userid'} = $tvars{'loginid'}    unless(Authorised(ADMIN) && $cgiparams{'userid'});
     $tvars{data}->{name} = UserName($cgiparams{userid});
 
-    my @mandatory = qw(userid effect1 effect2 effect3);
+    my @mandatory = qw(userid effect2 effect3);
+    push @mandatory, 'effect1'  if($cgiparams{'userid'} == $tvars{'loginid'} || $tvars{user}{access} < ADMIN);
+
     if(FieldCheck(\@mandatory,\@mandatory)) {
         $tvars{errmess} = 'All fields must be complete, please try again.';
         $tvars{errcode} = 'ERROR';
@@ -226,11 +228,13 @@ sub Password {
     my $who = $cgiparams{'userid'};
     $who = $tvars{'loginid'} if(Authorised(ADMIN));
 
-    my @rows = $dbi->GetQuery('hash','ValidUser',$who,$cgiparams{'effect1'});
-    unless(@rows) {
-        $tvars{errmess} = 'Current password is invalid, please try again.';
-        $tvars{errcode} = 'ERROR';
-        return;
+    if($cgiparams{'userid'} == $tvars{'loginid'} || $tvars{user}{access} < ADMIN) {
+        my @rows = $dbi->GetQuery('hash','ValidUser',$who,$cgiparams{'effect1'});
+        unless(@rows) {
+            $tvars{errmess} = 'Current password is invalid, please try again.';
+            $tvars{errcode} = 'ERROR';
+            return;
+        }
     }
 
     if($cgiparams{effect2} ne $cgiparams{effect3}) {
@@ -255,7 +259,7 @@ sub Password {
     }
 
     $dbi->DoQuery('ChangePassword',$cgiparams{effect2},$cgiparams{'userid'});
-    $tvars{thanks} = 'Password Changed.';
+    $tvars{thanks}  = 2;
 
     if($cgiparams{mailuser}) {
         my @rows = $dbi->GetQuery('hash','GetUserByID',$cgiparams{'userid'});
@@ -265,6 +269,8 @@ sub Password {
                     email       => $rows[0]->{email}
         );
     }
+
+    SetCommand('user-adminedit')    if(Authorised(ADMIN) && $cgiparams{'userid'} != $tvars{'loginid'});
 }
 
 sub Register {
@@ -478,6 +484,7 @@ sub Save {
 
     $tvars{data}{userid} = $cgiparams{'userid'};
     $tvars{newuser} = 0;
+    $tvars{thanks}  = 1;
 }
 
 sub AdminSave {
@@ -526,6 +533,7 @@ sub AdminSave {
 
     $tvars{data}->{userid} = $cgiparams{'userid'};
     $tvars{newuser} = 0;
+    $tvars{thanks}  = 1;
 }
 
 sub Delete {
@@ -617,35 +625,64 @@ sub ACL {
     return  unless $cgiparams{'userid'};
 
     my @rows = $dbi->GetQuery('hash','GetUserByID',$cgiparams{'userid'});
-    $tvars{data}->{$_} = $rows[0]->{$_}  for(qw(userid realname));
+    $tvars{data}->{$_} = $rows[0]->{$_}  for(qw(userid realname accessname));
+
+    push @{$tvars{data}->{access}}, { folderid => 0, foldername => 'default', accessname => $tvars{data}->{accessname} };
 
     @rows = $dbi->GetQuery('hash','UserACLs',$cgiparams{'userid'});
     for my $row (@rows) {
+        $row->{ddaccess} = AccessSelect($row->{accessid},'ACCESS' . $row->{aclid});
         push @{$tvars{data}->{access}}, $row;
     }
 
-    $tvars{ddfolder} = FolderSelect();
-    $tvars{ddaccess} = AccessSelect();
+    $tvars{ddprofile} = ProfileSelect();
+    $tvars{ddfolder}  = FolderSelect();
+    $tvars{ddaccess}  = AccessSelect();
+}
+
+sub ACLAdd1 {
+    LoadProfiles();
+    if($settings{profiles}{profiles}{$cgiparams{profile}}) {
+        for(keys %{ $settings{profiles}{profiles}{$cgiparams{profile}} }) {
+            my $folderid = FolderID($_);
+            my $accessid = AccessID($settings{profiles}{profiles}{$cgiparams{profile}}{$_});
+
+            my @rows = $dbi->GetQuery('hash','UserACLCheck', $cgiparams{'userid'}, $folderid);
+            if(@rows) {
+                $dbi->DoQuery('UserACLUpdate',$accessid,$cgiparams{'userid'},$folderid)
+                    if($rows[0]->{accessid} < $accessid);
+            } else {
+                $dbi->DoQuery('UserACLInsert',$accessid,$cgiparams{'userid'},$folderid);
+            }
+        }
+    }
+}
+
+sub ACLAdd2 {
+    my ($userid,$folderid,$accessid) = @_;
+    my @rows = $dbi->GetQuery('hash','UserACLCheck', $userid, $folderid);
+    if(@rows) {
+        $dbi->DoQuery('UserACLUpdate',$accessid,$userid,$folderid)
+            if($rows[0]->{accessid} < $accessid);
+    } else {
+        $dbi->DoQuery('UserACLInsert',$accessid,$userid,$folderid);
+    }
 }
 
 sub ACLSave {
     return  unless AccessUser($LEVEL);
 
-    my @manfields = qw(userid accessid folderid);;
-    return  if FieldCheck(\@manfields,\@manfields);
+    if($cgiparams{submit} eq 'Apply') {
+        ACLAdd1();
+    } elsif($cgiparams{submit} eq 'Add') {
+        ACLAdd2($cgiparams{userid},$cgiparams{folderid},$cgiparams{accessid});
+    } else {
+        for my $folderid ( map { s/ACCESS// } grep {/ACCESS/} keys %cgiparams) {
+            ACLAdd2($cgiparams{userid},$folderid,$cgiparams{'ACCESS'.$folderid});
+        }
+    }
 
-    my @rows = $dbi->GetQuery('hash','UserACLCheck',
-            $cgiparams{'userid'},
-            $cgiparams{'accessid'},
-            $cgiparams{'folderid'});
-    return  if(@rows);
-
-    $dbi->DoQuery('UserACLSave',
-            $cgiparams{'userid'},
-            $cgiparams{'accessid'},
-            $cgiparams{'folderid'});
-
-    $tvars{thanks} = 'User access saved successfully.';
+    $tvars{thanks} = 'User permissions saved successfully.';
 }
 
 sub ACLDelete {

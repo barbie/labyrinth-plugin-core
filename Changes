@@ -1,6 +1,10 @@
 Changes for the Labyrinth Core Plugins
 ======================================
 
+        - added paging to search and meta search (Articles).
+        - added core realm change methods (Content).
+        - revised Folders and Access permissions (Folders, Users).
+
 5.13    2013-10-29
         - reinstated store of 'latest' field.
         - reworked AddArticle field order to compliment SaveArticle (not
