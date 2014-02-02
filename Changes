@@ -1,6 +1,7 @@
 Changes for the Labyrinth Core Plugins
 ======================================
 
+5.14    2014-02-02
         - added paging to search and meta search (Articles).
         - added core realm change methods (Content).
         - revised Folders and Access permissions (Folders, Users).
