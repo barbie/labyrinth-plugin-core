@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                     Labyrinth::Plugin::Core
-version:                  5.13
+version:                  5.14
 abstract:                 Labyrinth Website Management Framework Core Plugins
 author:
   - Barbie <barbie@cpan.org>
@@ -33,46 +33,46 @@ build_requires:
 provides:
   Labyrinth::Plugin::Articles:
     file:     lib/Labyrinth/Plugin/Articles.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Articles::Sections:
     file:     lib/Labyrinth/Plugin/Articles/Sections.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Articles::Site:
     file:     lib/Labyrinth/Plugin/Articles/Site.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Content:
     file:     lib/Labyrinth/Plugin/Content.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Core:
     file:     lib/Labyrinth/Plugin/Core.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Folders:
     file:     lib/Labyrinth/Plugin/Folders.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Groups:
     file:     lib/Labyrinth/Plugin/Groups.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Hits:
     file:     lib/Labyrinth/Plugin/Hits.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Images:
     file:     lib/Labyrinth/Plugin/Images.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Inbox:
     file:     lib/Labyrinth/Plugin/Inbox.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Menus:
     file:     lib/Labyrinth/Plugin/Menus.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::News:
     file:     lib/Labyrinth/Plugin/News.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Users:
     file:     lib/Labyrinth/Plugin/Users.pm
-    version:  5.13
+    version:  5.14
   Labyrinth::Plugin::Users::Info:
     file:     lib/Labyrinth/Plugin/Users/Info.pm
-    version:  5.13
+    version:  5.14
 
 no_index:
   directory:
