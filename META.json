@@ -1,5 +1,5 @@
 {
-    "name": "Labyrinth::Plugin::Core",
+    "name": "Labyrinth-Plugin-Core",
     "version": "5.14",
     "abstract": "Labyrinth Website Management Framework Core Plugins",
     "author": [
