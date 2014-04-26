@@ -5,6 +5,8 @@ Changes for the Labyrinth Core Plugins
         - added LICENSE file.
         - fixed loading of user info config (Users/Info).
         - implemented ACL profiles (Users).
+        - introduced the concept of disabled accounts, to differentiate from 
+          banned users, where accounts cannot be reinstated or deleted (Users).
 
 5.14    2014-02-02
         - added paging to search and meta search (Articles).

@@ -337,11 +337,20 @@ Save the given user. For use by admin user to update any non-system user.
 
 =item Delete
 
-Delete the specified user.
+Delete the specified user account
 
 =item Ban
 
-Ban the specified user.
+Ban the specified user account. Account can be reactivated or deleted. 
+
+Banned users should receive a message at login, explain who they need to 
+contact to be reinstated.
+
+=item Disable
+
+Disable the specified user account. This different from a banned user, in that
+disabled accounts cannot be reactivated or deleted. This is to prevent reuse of
+an old account.
 
 =item AdminPass
 
@@ -377,6 +386,7 @@ sub Admin {
         $dbi->DoQuery('SetUserSearch',{ids=>$ids},1)    if($cgiparams{doaction} eq 'Show');
         $dbi->DoQuery('SetUserSearch',{ids=>$ids},0)    if($cgiparams{doaction} eq 'Hide');
         Ban($ids)                                       if($cgiparams{doaction} eq 'Ban');
+        Disable($ids)                                   if($cgiparams{doaction} eq 'Disable');
         Delete($ids)                                    if($cgiparams{doaction} eq 'Delete');
     }
 
@@ -544,6 +554,13 @@ sub Delete {
     return  unless AccessUser($LEVEL);
     $dbi->DoQuery('DeleteUsers',{ids => $ids});
     $tvars{thanks} = 'Users Deleted.';
+}
+
+sub Disable {
+    my $ids = shift;
+    return  unless AccessUser($LEVEL);
+    $dbi->DoQuery('BanUsers',{ids => $ids},'-deleted-');
+    $tvars{thanks} = 'Users Disabled.';
 }
 
 sub Ban {
