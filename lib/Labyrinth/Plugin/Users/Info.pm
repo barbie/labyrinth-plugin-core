@@ -51,7 +51,7 @@ my %fields = (
 #    hometitle => { type => 0, html => 1 },
 
 
-my (@mandatory,@allfields,@fieldorder);
+my (@mandatory,@allfields,@fieldorder,@fieldnames);
 for(keys %fields) {
     push @mandatory, $_     if($fields{$_}->{type});
     push @allfields, $_;
@@ -141,7 +141,7 @@ sub Save {
     return  if FieldCheck(\@allfields,\@mandatory);
 
     my @fields = ((map {$tvars{data}->{$_}} @fieldorder), $tvars{data}->{'userid'});
-    $dbi->DoQuery('SaveUserInfo',@fields);
+    $dbi->DoQuery('SaveUserInfo',{ 'keys' => join(',', map {"$_=?"} @fieldnames) },@fields);
 }
 
 sub LoadInfo {
@@ -155,12 +155,13 @@ sub LoadInfo {
     }
 
     for my $name ($cfg->Parameters('EXTRA')) {
-        push @fieldorder, $name;
         my $value = $cfg->val('EXTRA',$name);
         next    unless($value);
 
-        my ($type,$html) = split(',',$value);
+        my ($type,$html,$field) = split(',',$value);
         $fields{$name} = {type => $type, html => $html};
+        push @fieldorder, $name;
+        push @fieldnames, $field;
     }
 
     (@mandatory,@allfields) = ();
