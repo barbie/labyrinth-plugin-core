@@ -4,6 +4,7 @@ Changes for the Labyrinth Core Plugins
         - fixed distribution name in META.
         - added LICENSE file.
         - fixed loading of user info config (Users/Info).
+        - implemented ACL profiles (Users).
 
 5.14    2014-02-02
         - added paging to search and meta search (Articles).
