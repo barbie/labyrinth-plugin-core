@@ -1,6 +1,7 @@
 Changes for the Labyrinth Core Plugins
 ======================================
 
+5.15    2014-04-27
         - fixed distribution name in META.
         - added LICENSE file.
         - fixed loading of user info config (Users/Info).
