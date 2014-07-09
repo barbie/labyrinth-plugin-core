@@ -31,7 +31,7 @@ framework.
 use base qw(Labyrinth::Plugin::Base);
 
 use Labyrinth::Audit;
-use Labyrinth::Globals  qw(:default);
+use Labyrinth::Globals;
 use Labyrinth::DBUtils;
 use Labyrinth::Media;
 use Labyrinth::MLUtils;

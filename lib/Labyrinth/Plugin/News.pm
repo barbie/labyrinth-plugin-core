@@ -23,7 +23,7 @@ use base qw(Labyrinth::Plugin::Base);
 
 use Clone qw(clone);
 
-use Labyrinth::Globals  qw(:default);
+use Labyrinth::Globals;
 use Labyrinth::DBUtils;
 use Labyrinth::DTUtils;
 use Labyrinth::Media;

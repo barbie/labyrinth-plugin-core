@@ -2,6 +2,7 @@ Changes for the Labyrinth Core Plugins
 ======================================
 
         - reinstate name field for each menu.
+        - Exporter tag ':default in Labyrinth::Globals no longer used.
 
 5.15    2014-04-27
         - fixed distribution name in META.
