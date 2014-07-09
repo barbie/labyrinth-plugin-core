@@ -5,6 +5,21 @@ use strict;
 
 our $VERSION = '5.15';
 
+#----------------------------------------------------------------------------
+# Libraries
+
+use base qw(Labyrinth::Plugin::Base);
+
+use Labyrinth::Variables;
+
+#----------------------------------------------------------------------------
+# Public Interface Functions
+
+sub Editor      { return  unless AccessUser(EDITOR);    }
+sub Publisher   { return  unless AccessUser(PUBLISHER); }
+sub Admin       { return  unless AccessUser(ADMIN);     }
+sub Master      { return  unless AccessUser(MASTER);    }
+
 1;
 
 __END__
@@ -51,6 +66,30 @@ and other features which are intended to provide you with the information to
 use and extend Labyrinth as you wish.
 
 [1] http://labyrinth.missbarbell.co.uk
+
+=head1 METHODS
+
+The Core module provides some convience methods for the dispatch tables.
+
+=over 4
+
+=item Editor
+
+Redirects to login page if user doesn't have Editor access.
+
+=item Publisher
+
+Redirects to login page if user doesn't have Publisher access.
+
+=item Admin
+
+Redirects to login page if user doesn't have Admin access.
+
+=item Master
+
+Redirects to login page if user doesn't have Master access.
+
+=back
 
 =head1 SEE ALSO
 
