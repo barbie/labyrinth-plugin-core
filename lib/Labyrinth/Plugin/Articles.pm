@@ -46,6 +46,7 @@ use constant    PARA            => 2;
 use constant    LINK            => 3;
 use constant    MFILE           => 4;   # Media File
 use constant    DFILE           => 5;   # Download File
+use constant    VIDEO           => 6;
 
 use constant    MAINPAGE        => 5;
 use constant    LIMIT_LATEST    => 20;
@@ -118,7 +119,7 @@ plugins.
   5 = profiles (see Articles::Profiles)
   6 = diary (see Articles::Diary)
   7 = lyrics (see Articles::Lyrics)
-  8 = discographies (see Articles::Discography)
+  8 = liner notes (see Release)
 
 Note that some plugins mentioned above may not be currently available, however
 all are planned for release.
@@ -253,8 +254,9 @@ sub List {
     my $limit = $settings{data}{article_limit} || $settings{article_limit};
     my $step  = "LIMIT $limit"  if($limit);
     my $stop  = $settings{data}{article_stop} || MAINPAGE;
-    
+
     my $sectionid = $cgiparams{sectionid} || $SECTIONID;
+
     my @where = ("sectionid=$sectionid","publish=3");
     push @where, $settings{where}  if($settings{where});
     my $where = 'WHERE ' . join(' AND ',@where);
@@ -453,6 +455,10 @@ Add an image block to the current article.
 
 Add a link block to the current article.
 
+=item AddVideo
+
+Add a embedded video block to the current article.
+
 =item DeleteItem
 
 Delete an article.
@@ -646,6 +652,12 @@ sub AddLink {
     $dbi->IDQuery('AddContent',$data->{articleid},$item,LINK,0,'','',0);
 }
 
+sub AddVideo {
+    my ($blocks,$data,$body) = LoadContent();
+    my $item = @$blocks ? (@$blocks)[-1] + 1 : 1;
+    $dbi->IDQuery('AddContent',$data->{articleid},$item,VIDEO,0,'','',0);
+}
+
 sub DeleteItem {
     return  unless AccessUser($LEVEL2);
     return  unless $cgiparams{'recordid'};
@@ -731,6 +743,8 @@ sub LoadContent {
                 (undef,$body[$block]->{imagelink}) = GetImage($body[$block]->{imageid});
             }
 
+            $body[$block]->{href} ||= $body[$block]->{imagelink};
+
             $tag  ||= '';
             $width  = $cgiparams{"width$block"}  ? ($cgiparams{"width$block"}  > $maximagewidth  ? $maximagewidth  : $cgiparams{"width$block"})  : '';
             $height = $cgiparams{"height$block"} ? ($cgiparams{"height$block"} > $maximageheight ? $maximageheight : $cgiparams{"height$block"}) : '';
@@ -748,8 +762,26 @@ sub LoadContent {
 
         # links
         } elsif($type == LINK) {
-            $body[$block]->{body} = '';
+            $body[$block]->{paraid}  = $paraid;
+            $body[$block]->{body}    = $cgiparams{"LINK$block"};
+            $body[$block]->{href}    = CleanTags($cgiparams{"LINK$block"});
             $body[$block]->{imageid} = 0;
+
+        # video
+        } elsif($type == VIDEO) {
+            $body[$block]->{paraid}  = $paraid;
+
+            my $body = $cgiparams{"VIDEO$block"};
+            $body =~ s!.*?<iframe.*?src="([^"]+)".*!$1! if($body =~ /<iframe/);
+            
+            my $videoid = 0;
+            my ($type,$code) = $body =~ m!(.*)/(\w+)$!;
+            if($type =~ /youtu\.?be/)  { $videoid = 1 }
+            elsif($type =~ /vimeo/) { $videoid = 2 }
+
+            $body[$block]->{body}    = $body;
+            $body[$block]->{href}    = $code;
+            $body[$block]->{imageid} = $videoid;
 
         # media files
         } elsif($type == MFILE) {
@@ -965,6 +997,7 @@ sub Save {
         elsif($cgiparams{doaction} eq 'AddLink')   { AddLink();         }
         elsif($cgiparams{doaction} eq 'AddMedia')  { AddMedia();        }
         elsif($cgiparams{doaction} eq 'AddFile')   { AddFile();         }
+        elsif($cgiparams{doaction} eq 'AddVideo')  { AddVideo();        }
         elsif($cgiparams{doaction} eq 'Delete')    { DeleteItem();      }
         elsif($cgiparams{doaction} eq 'MoveUp')    { Relocate(1);       }
         elsif($cgiparams{doaction} eq 'MoveDn')    { Relocate(0);       }
