@@ -14,6 +14,9 @@ WriteMakefile(
     NO_META             => 1,
     PREREQ_PM           => {
 
+        # Labyrinth packages
+        'Labyrinth'             => '5.22',
+
         # prereqs
         'Clone'                 => '0',
         'Config::IniFiles'      => '0',
@@ -22,7 +25,6 @@ WriteMakefile(
         'File::Copy'            => '0',
         'File::Basename'        => '0',
         'Image::Size'           => '0',
-        'Labyrinth'             => '5.21',
         'Time::Local'           => '0',
         'URI::Escape'           => '0',
 
