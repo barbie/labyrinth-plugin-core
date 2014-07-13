@@ -1,6 +1,7 @@
 Changes for the Labyrinth Core Plugins
 ======================================
 
+5.16    2014-07-13
         - reinstate name field for each menu.
         - Exporter tag ':default' in Labyrinth::Globals no longer used.
         - now require Labyrinth-5.22.
