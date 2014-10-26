@@ -595,7 +595,7 @@ sub Add {
 sub Edit {
     return  unless AccessUser($LEVEL);
     return  unless AuthorCheck($GETSQL,$INDEXKEY,$LEVEL);
-    $tvars{primary} = $tvars{data}->{quickname} || 'draft' . $tvars{data}->{articleid};
+    $tvars{primary} = $tvars{data}->{quickname} || 'draft' . ($tvars{data}->{articleid}||0);
 
     my $maximagewidth  = $settings{maximagewidth}  || MaxArticleWidth;
     my $maximageheight = $settings{maximageheight} || MaxArticleHeight;
@@ -887,7 +887,7 @@ sub EditAmendments {
 sub Save {
     return  unless AccessUser($LEVEL);
     return  unless AuthorCheck($GETSQL,$INDEXKEY,$LEVEL);
-    $tvars{primary} = $tvars{data}->{quickname} || 'draft' . $tvars{data}->{articleid};
+    $tvars{primary} = $tvars{data}->{quickname} || 'draft' . ($tvars{data}->{articleid}||0);
     my $publish = $tvars{data}->{publish} || 0;
     my $sectionid = $cgiparams{sectionid} || $SECTIONID;
 
