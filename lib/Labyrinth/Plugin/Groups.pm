@@ -59,10 +59,6 @@ for(keys %fields) {
 
 For the current user login, set main group.
 
-=item UserGroups()
-
-For the current user login, return the list of groups they are associated with.
-
 =back
 
 =cut
@@ -70,32 +66,6 @@ For the current user login, return the list of groups they are associated with.
 sub GetUserGroup {
     my @rows = $dbi->GetQuery('hash','UserGroups',$tvars{loginid});
     $tvars{user}{groupid} = $rows[0]->{groupid}    if(@rows);
-}
-
-sub UserGroups {
-    my $userid  = shift || $tvars{loginid};
-    my (%groups,@grps);
-    my @rows = $dbi->GetQuery('hash','AllGroupIndex');
-    foreach (@rows) {
-                # a user link, but not our user
-        next    if($_->{type} == 0 && $_->{linkid} ne $userid);
-        if($_->{type} == 0) {
-            push @grps, $_->{groupid};
-        } else {
-            push @{$groups{$_->{linkid}}}, $_->{groupid};
-        }
-    }
-    my @list = ();
-    while(@grps) {
-        my $g = shift @grps;
-        push @list, $g;
-        next    unless($groups{$g});
-        push @grps, @{$groups{$g}};
-        delete $groups{$g};
-    }
-    my %hash = map {$_ => 1} @list;
-    my $grps = join(",",keys %hash);
-    return $grps;
 }
 
 =head1 ADMIN INTERFACE METHODS
