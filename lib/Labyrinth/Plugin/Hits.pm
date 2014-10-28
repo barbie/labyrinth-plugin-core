@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Hits;
 use strict;
 use warnings;
 
-my $VERSION = '5.16';
+my $VERSION = '5.17';
 
 =head1 NAME
 
