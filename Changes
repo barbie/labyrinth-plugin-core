@@ -1,6 +1,8 @@
 Changes for the Labyrinth Core Plugins
 ======================================
 
+        - store/update realm when saving user details (Users).
+
 5.17    2014-10-28
         - moved UserGroups from Plugin::Groups to Core (Groups).
         - default to an id of 0, if articleid not set. (Articles).

@@ -469,6 +469,10 @@ sub Save {
 
     return  if FieldCheck(\@allfields,\@manfields);
 
+    # determine realm
+    $tvars{data}{'realm'}   = RealmName($tvars{data}{'realmid'});
+    $tvars{data}{'realm'} ||= 'public';
+
     ## before continuing we should ensure the IP address has not
     ## submitted repeated registrations. Though we should be aware
     ## of Proxy Servers too.
@@ -479,7 +483,8 @@ sub Save {
         )   if($cgiparams{image});
 
     my @fields = (  $tvars{data}{'nickname'}, $tvars{data}{'realname'},
-                    $tvars{data}{'email'},    $imageid
+                    $tvars{data}{'email'},    $imageid,
+                    $tvars{data}{'realm'}
     );
 
     if($newuser) {
@@ -489,7 +494,6 @@ sub Save {
         $cgiparams{'userid'} = $dbi->IDQuery('NewUser', $tvars{data}{'effect'},
                                                         $tvars{data}{'accessid'},
                                                         $tvars{data}{'search'},
-                                                        $tvars{data}{'realm'},
                                                         @fields);
     } else {
         $dbi->DoQuery('SaveUser',@fields,$cgiparams{'userid'});
