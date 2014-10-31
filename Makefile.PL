@@ -15,7 +15,7 @@ WriteMakefile(
     PREREQ_PM           => {
 
         # Labyrinth packages
-        'Labyrinth'             => '5.22',
+        'Labyrinth'             => '5.27',
 
         # prereqs
         'Clone'                 => '0',

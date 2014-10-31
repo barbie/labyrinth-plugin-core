@@ -43,7 +43,7 @@
                 "File::Copy": "0",
                 "File::Basename": "0",
                 "Image::Size": "0",
-                "Labyrinth": "5.22",
+                "Labyrinth": "5.27",
                 "Time::Local": "0",
                 "URI::Escape": "0"
             }

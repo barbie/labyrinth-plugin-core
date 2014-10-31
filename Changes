@@ -3,6 +3,7 @@ Changes for the Labyrinth Core Plugins
 
         - store/update realm when saving user details (Users).
         - fixed license fields in META.json to be lists.
+        - now requires Labyrinth-5.27.
 
 5.17    2014-10-28
         - moved UserGroups from Plugin::Groups to Core (Groups).
