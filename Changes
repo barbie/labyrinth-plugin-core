@@ -3,7 +3,7 @@ Changes for the Labyrinth Core Plugins
 
 5.17    2014-10-28
         - moved UserGroups from Plugin::Groups to Core (Groups).
-	- default to an id of 0, if articleid not set. (Articles).
+        - default to an id of 0, if articleid not set. (Articles).
 
 5.16    2014-07-13
         - reinstate name field for each menu.
@@ -35,7 +35,7 @@ Changes for the Labyrinth Core Plugins
         - prevent HTML tags being added to image text tags.
         - use ResizeDimensions where appropriate. (requires Labyrinth 5.18)
 
-5.11	2013-03-30
+5.11    2013-03-30
         - change file dates changed to meet W3CDTF standards.
         - upgraded to Test::CPAN::Meta::JSON for tests.
         - reworked Makefile.PL for clarity.
@@ -44,48 +44,48 @@ Changes for the Labyrinth Core Plugins
         - fixed using images in menus.
         - revised access to admin functions.
 
-5.10	2012-01-24
+5.10    2012-01-24
         - config settings maximagewidth & maximageheight used to set default 
           size (Articles).
         - Alignment changes as per fixes in Labyrinth-5.12.
         - base access reset to EDITOR (Articles/Site).
 
-5.09	2011-12-31
+5.09    2011-12-31
         - added link titles
         - fixed image href saving.
 
-5.08	2011-06-19
+5.08    2011-06-19
         - GetImageSize now used for articles.
         - GetImageSize now used in Users::Item.
 
-5.07	2011-06-19
+5.07    2011-06-19
         - more documentation updates.
         - expanded Sections functionality.
         - update to Users to correctly reference image sizes.
         - include gravatar references with user profiles.
 
-5.06	2011-03-13
+5.06    2011-03-13
         - updated documentation.
 
-5.05	2011-02-24
+5.05    2011-02-24
         - update Articles to better support limit, stop and order from plugins.
 
-5.04	2011-01-04
+5.04    2011-01-04
         - added Articles::Site from Labyrinth-Demo.
 
-5.03	2011-01-03
+5.03    2011-01-03
         - query added list of fields to be cleaned before displaying.
         - update from live for saving menu options.
         - update from live for saving user details.
 
-5.02	2011-01-01
+5.02    2011-01-01
         - fix to check MASTER access.
 
-5.01	2011-01-01
+5.01    2011-01-01
         - moved MasterCheck from plugins to core
 
-5.00	2011-01-01
+5.00    2011-01-01
         - official release alongside Labyrinth Core.
 
-4.17	2010-03-11
+4.17    2010-03-11
         - split from Labyrinth Core.
