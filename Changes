@@ -1,6 +1,8 @@
 Changes for the Labyrinth Core Plugins
 ======================================
 
+        - extended META test suite.
+
 5.18    2014-11-11
         - store/update realm when saving user details (Users).
         - fixed license fields in META.json to be lists.
