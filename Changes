@@ -1,6 +1,7 @@
 Changes for the Labyrinth Core Plugins
 ======================================
 
+5.19    2015-01-25
         - extended META test suite.
 
 5.18    2014-11-11
@@ -24,7 +25,7 @@ Changes for the Labyrinth Core Plugins
         - added LICENSE file.
         - fixed loading of user info config (Users/Info).
         - implemented ACL profiles (Users).
-        - introduced the concept of disabled accounts, to differentiate from 
+        - introduced the concept of disabled accounts, to differentiate from
           banned users, where accounts cannot be reinstated or deleted (Users).
 
 5.14    2014-02-02
@@ -52,7 +53,7 @@ Changes for the Labyrinth Core Plugins
         - revised access to admin functions.
 
 5.10    2012-01-24
-        - config settings maximagewidth & maximageheight used to set default 
+        - config settings maximagewidth & maximageheight used to set default
           size (Articles).
         - Alignment changes as per fixes in Labyrinth-5.12.
         - base access reset to EDITOR (Articles/Site).

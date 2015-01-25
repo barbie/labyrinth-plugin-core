@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use vars qw($VERSION $ALLSQL $SECTIONID);
-$VERSION = '5.18';
+$VERSION = '5.19';
 
 =head1 NAME
 

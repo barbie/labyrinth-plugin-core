@@ -3,7 +3,7 @@ package Labyrinth::Plugin::Groups;
 use warnings;
 use strict;
 
-my $VERSION = '5.18';
+our $VERSION = '5.19';
 
 =head1 NAME
 
